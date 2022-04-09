@@ -1,8 +1,8 @@
 # Discord-Movie-Bot
 
-No Category:
+Commands:
 
- * add_movie Добавляет фильм в список
+ *  add_movie Добавляет фильм в список
   
  *  add_quote Добавляет цитату в золотой фонд
   
