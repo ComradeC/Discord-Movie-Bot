@@ -31,7 +31,7 @@ To get a password log in to https://fornex.com/my/vps under devrookiesquad@gmail
 
 Run service:
 
-*$ pm2 start <main_file_name> --name <your_bot_name> --interpreter python3*
+*$ pm2 start <main_file_name> --name <your_process_name> --interpreter python3*
 
 Show list of running processes:
 
@@ -49,4 +49,4 @@ Docs for pm2 https://pm2.keymetrics.io/docs/usage/quick-start/
 
 ## To run bot locally
 
-*$ python bot.py*
+*$ python <main_file_name>*
