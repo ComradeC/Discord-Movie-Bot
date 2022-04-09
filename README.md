@@ -45,6 +45,8 @@ Delete process:
 
 *$ pm2 delete <process_id>*
 
+Docs for pm2 https://pm2.keymetrics.io/docs/usage/quick-start/
+
 ## To run bot locally
 
 *$ python bot.py*
