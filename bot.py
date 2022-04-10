@@ -22,7 +22,7 @@ def write(filename, save_object):
 
 
 load_dotenv()
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = "OTYyMjMzMzE1MDgxOTk4NDA2.YlEjmw.MWgnG3zqWsvJfgjev-Liuz98DMk"
 bot = commands.Bot(command_prefix="!")
 
 
@@ -68,4 +68,4 @@ async def print_golden_quotes(ctx):
     for i in range(len(quotes)):
         await ctx.author.send(" - ".join(quotes[i]))
 
-bot.run(os.getenv("TOKEN"))
+bot.run("OTYyMjMzMzE1MDgxOTk4NDA2.YlEjmw.MWgnG3zqWsvJfgjev-Liuz98DMk")
