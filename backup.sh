@@ -1,8 +1,2 @@
-#!/bin/sh
-cd ..
-if [ ! -d "backup" ]; then
-  mkdir backup
-fi
-cd Discord-Movie-Bot
-cp golden_quotes.json ../backup/golden_quotes.json
-cp movie_list.json ../backup/movie_list.json
+cp golden_quotes.js ./../golden_quotes.js
+cp movie_list.js ./../movie_list.js
