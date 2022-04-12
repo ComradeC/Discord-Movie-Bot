@@ -4,6 +4,7 @@ import requests
 import os
 import time
 
+from twitchAPI.oauth import refresh_access_token
 from discord.ext import tasks, commands
 from dotenv import load_dotenv
 from twitchAPI.twitch import Twitch
@@ -15,14 +16,16 @@ app_token = os.getenv("TWITCH_APP_ACCESS_TOKEN")
 
 client_secret = os.getenv("TWITCH_CLIENT_SECRET")
 client_id = os.getenv("TWITCH_CLIENT_ID")
+refresh_token = os.getenv("TWITCH_REFRESH_TOKEN")
 
+new_token, new_refresh_token = refresh_access_token(refresh_token, client_id, client_secret)
 twitch = Twitch(app_id, client_secret)
 twitch.authenticate_app([])
 
 
 API_HEADERS = {
     'Client-ID': app_id,
-    'Authorization': 'Bearer '+app_token,
+    'Authorization': 'Bearer '+new_token,
 }
 
 reqSession = requests.Session()
@@ -38,7 +41,13 @@ def check_user(username):
         else:
             return False
     except Exception as e:
-        print("Error checking user: ", e)
+        global app_token
+        global refresh_token
+        print("Twitch login error. Trying to refresh app token.")
+        try:
+            app_token, refresh_token = refresh_access_token(refresh_token, client_id, client_secret)
+        finally:
+            print("Done")
         return False
 
 
@@ -54,7 +63,7 @@ class Integration(commands.Cog):
 
     @tasks.loop(seconds=300)
     async def bratiki_watch(self):
-        channel = self.bot.get_channel(962235918150955011)
+        channel = self.bot.get_channel(962758647883116605)
         if check_user("bratiki94") is True:
             await channel.send("Братики онлайн. Делайте что хотите с этой информацией.")
             time.sleep(28500)
