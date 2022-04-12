@@ -1,4 +1,5 @@
 
 .env
 original.env
+twitch_renew_code.py
 tests.py

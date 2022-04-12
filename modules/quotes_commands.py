@@ -35,10 +35,12 @@ class Quotes(commands.Cog):
 
     @commands.command(name="quotes", aliases=["quote", "цитаты"], help="Ваш карманный фонд золотых цитат")
     async def print_quotes(self, ctx):
+        quotes_list = ""
         quotes = read("DBs/golden_quotes.json").get("quotes")
         await ctx.author.send("Пантеон великих цитат")
         for i in range(len(quotes)):
-            await ctx.author.send(" - ".join(quotes[i]))
+            quotes_list += (str(quotes[i]).capitalize()) + "\n"
+        await ctx.send("```" + quotes_list + "```")
 
     @commands.command(name="delete_quote", aliases=["dq", "у_цитату"], help="Удаляет цитату из фонда")
     async def delete_quote(self, ctx, quote):

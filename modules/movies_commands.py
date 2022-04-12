@@ -1,8 +1,8 @@
 # movies_commands.py
 
-import discord
 from discord.ext import commands
 import json
+
 
 
 def read(filename):
@@ -36,10 +36,11 @@ class Movies(commands.Cog):
 
     @commands.command(name="movies", aliases=["movie", "кино", "фильмы"], help="Печатает список фильмов")
     async def print_movie_list(self, ctx):
-        await ctx.send("Что бы посмотреть?")
+        movie_list = ""
         movies = read("DBs/movie_list.json").get("movies")
         for i in range(len(movies)):
-            await ctx.send(str(movies[i]).capitalize())
+            movie_list += (str(movies[i]).capitalize()) + "\n"
+        await ctx.send("```" + movie_list + "```")
 
     @commands.command(name="delete_movie", aliases=["dm", "у_фильм"], help="Удаляет фильм из списка")
     async def delete_movie(self, ctx, movie):
