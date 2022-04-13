@@ -1,8 +1,8 @@
 # movies_commands.py
 
-from discord.ext import commands
+import nextcord
 import json
-
+from nextcord.ext import commands
 
 
 def read(filename):
@@ -40,7 +40,8 @@ class Movies(commands.Cog):
         movies = read("DBs/movie_list.json").get("movies")
         for i in range(len(movies)):
             movie_list += (str(movies[i]).capitalize()) + "\n"
-        await ctx.send("```" + movie_list + "```")
+        thread = await ctx.channel.create_thread(name="Movie List", auto_archive_duration=60, type=nextcord.ChannelType.public_thread)
+        await thread.send("```" + movie_list + "```")
 
     @commands.command(name="delete_movie", aliases=["dm", "у_фильм"], help="Удаляет фильм из списка")
     async def delete_movie(self, ctx, movie):
@@ -50,5 +51,5 @@ class Movies(commands.Cog):
         await ctx.message.add_reaction("⚡")
 
 
-def setup(bot):
-    bot.add_cog(Movies(bot))
+async def setup(bot):
+    await bot.add_cog(Movies(bot))

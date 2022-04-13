@@ -1,33 +1,30 @@
 # bot.py
 # version 0.2beta
 
-import json
 import requests
 import os
-from modules import twitch_integration
-from modules import quotes_commands
-from modules import movies_commands
-from discord.ext import commands
+import nextcord
+from cogs import movies_commands, quotes_commands, twitch_integration
+from nextcord.ext import commands
 from dotenv import load_dotenv
-
 load_dotenv()
 
 reqSession = requests.Session()
 
-bot = commands.Bot(command_prefix="!")
-bot.add_cog(twitch_integration.Integration(bot))
-bot.add_cog(movies_commands.Movies(bot))
-bot.add_cog(quotes_commands.Quotes(bot))
+MovieBot = commands.Bot(command_prefix="!", intends=nextcord.Intents.default())
+
+MovieBot.add_cog(twitch_integration.Integration(MovieBot))
+MovieBot.add_cog(movies_commands.Movies(MovieBot))
+MovieBot.add_cog(quotes_commands.Quotes(MovieBot))
 
 
-@bot.event
+@MovieBot.event
 async def on_ready():
-    print(f"{bot.user} к бою готов!")
+    print(f"{MovieBot.user} к бою готов!")
 
 
-@bot.command(name="hello", help="Поздоровайся, будь человеком")
+@MovieBot.command(name="hello", help="Поздоровайся, будь человеком")
 async def hello(ctx):
     await ctx.send("Драсти")
 
-
-bot.run(os.getenv("DISCORD_TOKEN"))
+MovieBot.run(os.getenv("DISCORD_TOKEN"))

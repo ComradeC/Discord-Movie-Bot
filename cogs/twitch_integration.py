@@ -5,7 +5,7 @@ import os
 import time
 
 from twitchAPI.oauth import refresh_access_token
-from discord.ext import tasks, commands
+from nextcord.ext import tasks, commands
 from dotenv import load_dotenv
 from twitchAPI.twitch import Twitch
 load_dotenv()
@@ -71,5 +71,5 @@ class Integration(commands.Cog):
             time.sleep(1)
 
 
-def setup(bot):
-    bot.add_cog(Integration(bot))
+async def setup(bot):
+    await bot.add_cog(Integration(bot))

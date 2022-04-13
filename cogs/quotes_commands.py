@@ -1,7 +1,8 @@
 # quotes_commands.py
 
-from discord.ext import commands
+from nextcord.ext import commands
 import json
+import nextcord
 
 
 def read(filename):
@@ -37,10 +38,10 @@ class Quotes(commands.Cog):
     async def print_quotes(self, ctx):
         quotes_list = ""
         quotes = read("DBs/golden_quotes.json").get("quotes")
-        await ctx.author.send("Пантеон великих цитат")
         for i in range(len(quotes)):
             quotes_list += (str(quotes[i]).capitalize()) + "\n"
-        await ctx.send("```" + quotes_list + "```")
+        thread = await ctx.channel.create_thread(name="Quotes List", auto_archive_duration=60, type=nextcord.ChannelType.public_thread)
+        await thread.send("```" + quotes_list + "```")
 
     @commands.command(name="delete_quote", aliases=["dq", "у_цитату"], help="Удаляет цитату из фонда")
     async def delete_quote(self, ctx, quote):
@@ -50,5 +51,5 @@ class Quotes(commands.Cog):
         await ctx.message.add_reaction("⚡")
 
 
-def setup(bot):
-    bot.add_cog(Quotes(bot))
+async def setup(bot):
+    await bot.add_cog(Quotes(bot))
