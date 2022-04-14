@@ -1,7 +1,10 @@
 # movies_commands.py
 
+# standard modules
 import nextcord
 import json
+
+# external modules
 from nextcord.ext import commands
 
 

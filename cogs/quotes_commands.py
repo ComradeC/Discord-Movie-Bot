@@ -1,8 +1,11 @@
 # quotes_commands.py
 
-from nextcord.ext import commands
+# standard modules
 import json
 import nextcord
+
+# external modules
+from nextcord.ext import commands
 
 
 def read(filename):

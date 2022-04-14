@@ -1,14 +1,19 @@
 # bot.py
 # version 0.2beta
 
+# standard modules
 import requests
 import os
 import nextcord
-from cogs import movies_commands, quotes_commands, twitch_integration
+
+# external modules
 from nextcord.ext import commands
 from dotenv import load_dotenv
-load_dotenv()
 
+# cogs
+from cogs import movies_commands, quotes_commands, twitch_integration
+
+load_dotenv()
 reqSession = requests.Session()
 
 MovieBot = commands.Bot(command_prefix="!", intends=nextcord.Intents.default())

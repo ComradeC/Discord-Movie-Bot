@@ -1,16 +1,18 @@
 # twitch_integration.py
 
+# standard modules
 import requests
 import os
 import time
 
+# external modules
 from twitchAPI.oauth import refresh_access_token
 from nextcord.ext import tasks, commands
 from dotenv import load_dotenv
 from twitchAPI.twitch import Twitch
+
+
 load_dotenv()
-
-
 app_id = os.getenv("TWITCH_APP_TOKEN")
 app_token = os.getenv("TWITCH_APP_ACCESS_TOKEN")
 
