@@ -4,6 +4,7 @@
 import requests
 import os
 import time
+import asyncio
 
 # external modules
 from twitchAPI.oauth import refresh_access_token
@@ -68,9 +69,9 @@ class Integration(commands.Cog):
         channel = self.bot.get_channel(962758647883116605)
         if check_user("bratiki94") is True:
             await channel.send("Братики онлайн. Делайте что хотите с этой информацией.")
-            time.sleep(28500)
+            await asyncio.sleep(14400)
         else:
-            time.sleep(1)
+            await asyncio.sleep(1)
 
 
 async def setup(bot):
