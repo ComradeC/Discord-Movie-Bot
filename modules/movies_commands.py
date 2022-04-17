@@ -3,6 +3,8 @@
 from discord.ext import commands
 import json
 
+import psycopg2
+conn = psycopg2.connect(dbname='moviebotdb', user='postgres', password='admin')
 
 
 def read(filename):
@@ -33,6 +35,15 @@ class Movies(commands.Cog):
         movies.append(movie)
         write("DBs/movie_list.json", {"movies": movies})
         await ctx.message.add_reaction("👍")
+
+    @commands.command(name="add_movie_db", aliases=["amd", "д_фильм_бд"], help="Добавляет фильм в список, хранящийся в БД")
+    async def addMovieDB(self, ctx, movie):
+        cur=conn.cursor();
+        cur.execute("INSERT INTO MOVIES (title, watched) values (%s, false);", [movie]);
+        conn.commit();
+        await ctx.message.add_reaction("👍")
+
+
 
     @commands.command(name="movies", aliases=["movie", "кино", "фильмы"], help="Печатает список фильмов")
     async def print_movie_list(self, ctx):

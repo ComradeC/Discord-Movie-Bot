@@ -8,7 +8,10 @@ from modules import twitch_integration
 from modules import quotes_commands
 from modules import movies_commands
 from discord.ext import commands
+
 from dotenv import load_dotenv
+
+
 
 load_dotenv()
 
@@ -31,3 +34,5 @@ async def hello(ctx):
 
 
 bot.run(os.getenv("DISCORD_TOKEN"))
+
+
