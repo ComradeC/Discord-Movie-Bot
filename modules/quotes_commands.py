@@ -1,5 +1,4 @@
 # quotes_commands.py
-
 from discord.ext import commands
 import json
 
