@@ -4,11 +4,9 @@
 import json
 import requests
 import os
-from modules import twitch_integration
-from modules import quotes_commands
-from modules import movies_commands
-from modules import movies_db_commands
-from modules import quotes_db_commands
+from cogs import twitch_integration
+from cogs import quotes_commands
+from cogs import movies_commands
 from discord.ext import commands
 
 from dotenv import load_dotenv
@@ -21,10 +19,8 @@ reqSession = requests.Session()
 
 bot = commands.Bot(command_prefix="!")
 bot.add_cog(twitch_integration.Integration(bot))
-#bot.add_cog(movies_commands.Movies(bot))
-#bot.add_cog(quotes_commands.Quotes(bot))
-bot.add_cog(movies_db_commands.MoviesDB(bot))
-bot.add_cog(quotes_db_commands.QuotesDB(bot))
+bot.add_cog(movies_commands.Movies(bot))
+bot.add_cog(quotes_commands.Quotes(bot))
 
 @bot.event
 async def on_ready():
