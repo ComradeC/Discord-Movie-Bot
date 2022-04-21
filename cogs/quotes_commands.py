@@ -6,8 +6,8 @@ import psycopg2
 # external modules
 from nextcord.ext import commands
 
-#conn = psycopg2.connect(dbname='moviebotdb', user='postgres', password='admin')    #local test connection
-conn = psycopg2.connect(dbname='postgres', user='root', password='root')            #public server connection
+conn = psycopg2.connect(dbname='moviebotdb', user='postgres', password='admin')    #local test connection
+#conn = psycopg2.connect(dbname='postgres', user='root', password='root')            #public server connection
 
 class Quotes(commands.Cog):
 
@@ -18,7 +18,7 @@ class Quotes(commands.Cog):
     async def on_ready(self):
         print("QuotesDB cog loaded successfully")
 
-    @commands.command(name="add_quote_db", aliases=["запиши", "addQuote", "add_quote"], help="Увековечивает цитату в золотом фонде")
+    @commands.command(name="addquote", aliases=["запиши", "quote"], help="Увековечивает цитату в золотом фонде")
     async def add_quote(self, ctx, *args):
         cur = conn.cursor()
         quote = args[0]
@@ -44,7 +44,7 @@ class Quotes(commands.Cog):
         cur.close()
         await ctx.message.add_reaction("👍")
 
-    @commands.command(name="quotesDB", aliases=["Фонд","Цитаты"], help="Ваш карманный фонд золотых цитат")
+    @commands.command(name="quotesDB", aliases=["фонд","цитаты"], help="Ваш карманный фонд золотых цитат")
     async def print_quotesDB(self, ctx):
         text_list = list()
         time_list = list()
@@ -64,7 +64,7 @@ class Quotes(commands.Cog):
             await ctx.send(toSend)
         # await ctx.send(quote_list)
 
-    @commands.command(name="delete_quoteDB", aliases=[], help="Удаляет цитату из фонда (but why would you do this?)")
+    @commands.command(name="deletequote", aliases=["удали"], help="Удаляет цитату из фонда (but why would you do this?)")
     async def delete_quote(self, ctx, quote):
         cur = conn.cursor()
         cur.execute ("delete from quotes where text=%s", [quote])
