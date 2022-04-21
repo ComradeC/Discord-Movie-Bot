@@ -75,4 +75,4 @@ class Quotes(commands.Cog):
         cur.close()
 
 def setup(bot):
-    bot.add_cog(QuotesDB(bot))
+    bot.add_cog(Quotes(bot))

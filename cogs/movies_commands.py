@@ -55,4 +55,4 @@ class Movies(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(MoviesDB(bot))
+    bot.add_cog(Movies(bot))
