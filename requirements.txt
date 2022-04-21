@@ -1,4 +1,3 @@
-install_requires =
 aiohttp
 aiosignal
 async-timeout
@@ -9,6 +8,7 @@ frozenlist
 idna
 multidict
 nextcord
+psycopg2-binary
 python-dateutil
 python-dotenv
 requests
