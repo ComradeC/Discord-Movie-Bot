@@ -1,16 +1,19 @@
 # twitch_integration.py
 
+# standard modules
 import requests
 import os
 import time
+import asyncio
 
+# external modules
 from twitchAPI.oauth import refresh_access_token
-from discord.ext import tasks, commands
+from nextcord.ext import tasks, commands
 from dotenv import load_dotenv
 from twitchAPI.twitch import Twitch
+
+
 load_dotenv()
-
-
 app_id = os.getenv("TWITCH_APP_TOKEN")
 app_token = os.getenv("TWITCH_APP_ACCESS_TOKEN")
 
@@ -66,10 +69,10 @@ class Integration(commands.Cog):
         channel = self.bot.get_channel(962758647883116605)
         if check_user("bratiki94") is True:
             await channel.send("Братики онлайн. Делайте что хотите с этой информацией.")
-            time.sleep(28500)
+            await asyncio.sleep(14400)
         else:
-            time.sleep(1)
+            await asyncio.sleep(1)
 
 
-def setup(bot):
-    bot.add_cog(Integration(bot))
+async def setup(bot):
+    await bot.add_cog(Integration(bot))

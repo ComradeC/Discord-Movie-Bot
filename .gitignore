@@ -1,5 +1,6 @@
-
-.env
-original.env
-twitch_renew_code.py
+.idea/
+DBs/
+*.env
+/cogs/__pycache__/
 tests.py
+twitch_renew_code.py
