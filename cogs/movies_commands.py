@@ -1,25 +1,10 @@
-# movies_commands.py
-
-# standard modules
-import nextcord
-import json
+import psycopg2
 
 # external modules
 from nextcord.ext import commands
 
-
-def read(filename):
-    try:
-        with open(filename, "r") as json_file:
-            return json.loads(json_file.read())
-    except FileNotFoundError:
-        return {}
-
-
-def write(filename, save_object):
-    with open(filename, "w") as json_file:
-        json_file.write(json.dumps(save_object))
-
+#conn = psycopg2.connect(dbname='moviebotdb', user='postgres', password='admin')     #local test connection
+conn = psycopg2.connect(dbname='postgres', user='root', password='root')          #public server connection
 
 class Movies(commands.Cog):
 
@@ -28,31 +13,46 @@ class Movies(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Movies cog loaded successfully")
+        print("MoviesDB cog loaded successfully")
 
-    @commands.command(name="add_movie", aliases=["am", "д_фильм"], help="Добавляет фильм в список")
-    async def add_movie(self, ctx, movie):
-        movies = read("DBs/movie_list.json").get("movies")
-        movies.append(movie)
-        write("DBs/movie_list.json", {"movies": movies})
+
+    @commands.command(name="add_movie", aliases=["movie", "фильм", "посмотреть"], help="Добавляет фильм в список, чтобы посмотреть его позже")
+    async def addMovieDB(self, ctx, movie):
+        cur = conn.cursor()
+        cur.execute("INSERT INTO MOVIES (title, watched) values (%s, false);", [movie])
+        conn.commit()
+        cur.close()
         await ctx.message.add_reaction("👍")
 
-    @commands.command(name="movies", aliases=["movie", "кино", "фильмы"], help="Печатает список фильмов")
-    async def print_movie_list(self, ctx):
-        movie_list = ""
-        movies = read("DBs/movie_list.json").get("movies")
-        for i in range(len(movies)):
-            movie_list += (str(movies[i]).capitalize()) + "\n"
-        thread = await ctx.channel.create_thread(name="Movie List", auto_archive_duration=60, type=nextcord.ChannelType.public_thread)
-        await thread.send("```" + movie_list + "```")
 
-    @commands.command(name="delete_movie", aliases=["dm", "у_фильм"], help="Удаляет фильм из списка")
+    @commands.command(name="moviesall", aliases=[], help="Печатает список всех фильмов в БД")
+    async def printMoviesDBAll(self, ctx):
+        movie_list = list()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM movies")
+        for i in range(cur.rowcount):
+            movie_list += (cur.fetchone())
+            # await ctx.send()
+        await ctx.send(movie_list)
+
+
+    @commands.command(name="movieswatch", aliases=["watch", "что посмотреть"], help="Печатает список еще несмотренных фильмов в БД")
+    async def printMoviesDBUnwatched(self, ctx):
+        cur = conn.cursor()
+        cur.execute("SELECT title FROM movies where watched=false")
+        for i in range(cur.rowcount):
+            await ctx.send(cur.fetchone()[0])
+        cur.close()
+
+
+    @commands.command(name="deletemovie", aliases=["удалифильм"], help="Удаляет фильм из базы данных")
     async def delete_movie(self, ctx, movie):
-        movies = read("DBs/movie_list.json").get("movies")
-        movies.remove(movie)
-        write("DBs/movie_list.json", {"movies": movies})
+        cur = conn.cursor()
+        cur.execute("DELETE FROM movies WHERE title=%s", [movie])
+        conn.commit()
+        cur.close()
         await ctx.message.add_reaction("⚡")
 
 
-async def setup(bot):
-    await bot.add_cog(Movies(bot))
+def setup(bot):
+    bot.add_cog(Movies(bot))

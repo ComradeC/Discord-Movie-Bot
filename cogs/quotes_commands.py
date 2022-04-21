@@ -1,25 +1,13 @@
-# quotes_commands.py
-
-# standard modules
-import json
-import nextcord
+# quotes_db_commands.py
+import sys
+import time
+import psycopg2
 
 # external modules
 from nextcord.ext import commands
 
-
-def read(filename):
-    try:
-        with open(filename, "r") as json_file:
-            return json.loads(json_file.read())
-    except FileNotFoundError:
-        return {}
-
-
-def write(filename, save_object):
-    with open(filename, "w") as json_file:
-        json_file.write(json.dumps(save_object))
-
+#conn = psycopg2.connect(dbname='moviebotdb', user='postgres', password='admin')    #local test connection
+conn = psycopg2.connect(dbname='postgres', user='root', password='root')            #public server connection
 
 class Quotes(commands.Cog):
 
@@ -28,31 +16,63 @@ class Quotes(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Quotes cog loaded successfully")
+        print("QuotesDB cog loaded successfully")
 
-    @commands.command(name="add_quote", aliases=["aq", "д_цитату"], help="Добавляет цитату в золотой фонд")
-    async def add_quote(self, ctx, quote):
-        quotes = read("DBs/golden_quotes.json").get("quotes")
-        quotes.append(quote)
-        write("DBs/golden_quotes.json", {"quotes": quotes})
+    @commands.command(name="addquote", aliases=["запиши", "quote"], help="Увековечивает цитату в золотом фонде")
+    async def add_quote(self, ctx, *args):
+        cur = conn.cursor()
+        quote = args[0]
+        timestamp = None
+        movieName = None
+        try:
+            for i in range(1, len(args)):
+                if (':' in args[i]) and not (': ' in args[i]):
+                    timestamp = args[i]
+                if ': ' in args[i] or not (':' in args[i]):
+                    movieName = args[i]
+        except IndexError:
+            timestamp = None
+            movieName = None
+        try:
+            cur.execute(
+                "insert into quotes (text, movieid, timestamp) values (%s, (select id from movies where title=%s), %s);",
+                [quote, movieName, timestamp])
+        except Exception:
+            await ctx.send(sys.exc_info())
+            cur.close()
+        conn.commit()
+        cur.close()
         await ctx.message.add_reaction("👍")
 
-    @commands.command(name="quotes", aliases=["quote", "цитаты"], help="Ваш карманный фонд золотых цитат")
-    async def print_quotes(self, ctx):
-        quotes_list = ""
-        quotes = read("DBs/golden_quotes.json").get("quotes")
-        for i in range(len(quotes)):
-            quotes_list += (str(quotes[i]).capitalize()) + "\n"
-        thread = await ctx.channel.create_thread(name="Quotes List", auto_archive_duration=60, type=nextcord.ChannelType.public_thread)
-        await thread.send("```" + quotes_list + "```")
+    @commands.command(name="quotesDB", aliases=["фонд","цитаты"], help="Ваш карманный фонд золотых цитат")
+    async def print_quotesDB(self, ctx):
+        text_list = list()
+        time_list = list()
+        movie_list = list()
+        cur = conn.cursor()
+        cur.execute("select text, title, timestamp from quotes left join movies on movieid=movies.id")
+        for i in range(cur.rowcount):
+            quote = cur.fetchone()
+            text_list.append(quote[0])
+            movie_list.append(quote[1])
+            time_list.append(quote[2])
+        for i in range(len(text_list)):
+            toSend = str()
+            toSend += '"' + text_list[i] + '"'
+            if not (movie_list[i] is None): toSend += ' from "' + str(movie_list[i]) + '"'
+            if not (time_list[i] is None): toSend += ' at ' + str(time_list[i])
+            await ctx.send(toSend)
+        # await ctx.send(quote_list)
 
-    @commands.command(name="delete_quote", aliases=["dq", "у_цитату"], help="Удаляет цитату из фонда")
+    @commands.command(name="deletequote", aliases=["удали"], help="Удаляет цитату из фонда (but why would you do this?)")
     async def delete_quote(self, ctx, quote):
-        quotes = read("DBs/golden_quotes.json").get("quotes")
-        quotes.remove(quote)
-        write("DBs/golden_quotes.json", {"quotes": quotes})
-        await ctx.message.add_reaction("⚡")
+        cur = conn.cursor()
+        cur.execute ("delete from quotes where text=%s", [quote])
+        conn.commit()
+        if (cur.statusmessage == "DELETE 0"): await ctx.message.add_reaction("❓")
+        else: await ctx.message.add_reaction("⚡")
+        #await ctx.send(cur.statusmessage)
+        cur.close()
 
-
-async def setup(bot):
-    await bot.add_cog(Quotes(bot))
+def setup(bot):
+    bot.add_cog(Quotes(bot))
