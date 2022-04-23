@@ -12,26 +12,14 @@ pipeline {
         stage('Run') {
             steps {
                 script {
-                    sh 'python3 bot.py'
+                    sh 'pm2 start bot.py --name movie_bot --interpreter python3'
                 }
             }
         }
-        stage('Show logs') {
+        stage('Show running processes') {
             steps {
                 script {
-                    sh 'pm2 logs'
-                }
-            }
-            post {
-                failure {
-                    script{
-                        sh "exit 1"
-                    }
-                }
-                unstable {
-                    script{
-                           sh "exit 1"
-                     }
+                    sh 'pm2 list'
                 }
             }
         }
