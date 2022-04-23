@@ -23,24 +23,5 @@ pipeline {
                 }
             }
         }
-        stage('Show logs') {
-            steps {
-                script {
-//                     sh 'pm2 logs'
-                }
-            }
-            post {
-                failure {
-                    script{
-                        sh "exit 1"
-                    }
-                }
-                unstable {
-                    script{
-                           sh "exit 1"
-                     }
-                }
-            }
-        }
     }
 }
