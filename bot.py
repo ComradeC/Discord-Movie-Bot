@@ -32,4 +32,4 @@ async def on_ready():
 async def hello(ctx):
     await ctx.send("Драсти")
 
-MovieBot.run(os.getenv("DISCORD_TOKEN"))
+MovieBot.run(os.environ["DISCORD_TOKEN"])

@@ -14,12 +14,12 @@ from twitchAPI.twitch import Twitch
 
 
 load_dotenv()
-app_id = os.getenv("TWITCH_APP_TOKEN")
-app_token = os.getenv("TWITCH_APP_ACCESS_TOKEN")
+app_id = os.environ["TWITCH_APP_TOKEN"]
+app_token = os.environ["TWITCH_APP_ACCESS_TOKEN"]
 
-client_secret = os.getenv("TWITCH_CLIENT_SECRET")
-client_id = os.getenv("TWITCH_CLIENT_ID")
-refresh_token = os.getenv("TWITCH_REFRESH_TOKEN")
+client_secret = os.environ["TWITCH_CLIENT_SECRET"]
+client_id = os.environ["TWITCH_CLIENT_ID"]
+refresh_token = os.environ["TWITCH_REFRESH_TOKEN"]
 
 new_token, new_refresh_token = refresh_access_token(refresh_token, client_id, client_secret)
 twitch = Twitch(app_id, client_secret)
