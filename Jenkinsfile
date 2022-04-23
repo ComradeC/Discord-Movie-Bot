@@ -9,5 +9,12 @@ pipeline {
                 }
             }
         }
+        stage('Show running processes') {
+            steps {
+                script {
+                    sh 'pm2 list'
+                }
+            }
+        }
     }
 }
