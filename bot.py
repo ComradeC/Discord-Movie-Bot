@@ -14,17 +14,15 @@ from nextcord.ext import commands
 from dotenv import load_dotenv
 
 # cogs
-from cogs import movies_commands, quotes_commands#, twitch_integration
+from cogs import movies_commands, quotes_commands, twitch_integration
 
 load_dotenv()
 reqSession = requests.Session()
 
 
-#intends.members=True
-#intends.reactions=True
 MovieBot = commands.Bot(command_prefix="!", intends=nextcord.Intents.all())
 
-#MovieBot.add_cog(twitch_integration.Integration(MovieBot))
+MovieBot.add_cog(twitch_integration.Integration(MovieBot))
 MovieBot.add_cog(movies_commands.Movies(MovieBot))
 MovieBot.add_cog(quotes_commands.Quotes(MovieBot))
 
