@@ -39,7 +39,7 @@ class Movies(nextcord.ext.commands.Cog):
         await ctx.send(movie_list)
 
 
-    @nextcord.ext.commands.command(name="movieswatch", aliases=["watch", "что посмотреть"], help="Печатает список еще несмотренных фильмов в БД")
+    @nextcord.ext.commands.command(name="movieswatch", aliases=["watch", "смотреть"], help="Печатает список еще несмотренных фильмов в БД")
     async def printMoviesDBUnwatched(self, ctx):
         cur = conn.cursor()
         watchlist=list()
