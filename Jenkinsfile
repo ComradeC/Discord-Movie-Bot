@@ -2,9 +2,11 @@ pipeline {
     agent any
 
     stages {
-        stage('Test') {
+        stage('Setup') {
             steps {
-                echo 'Testing..'
+                script {
+                    sh 'pip install -r requirements.txt'
+                }
             }
         }
     }
