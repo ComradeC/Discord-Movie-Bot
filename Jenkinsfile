@@ -23,5 +23,12 @@ pipeline {
                 }
             }
         }
+        stage('Show logs') {
+            steps {
+                script {
+                    sh 'pm2 logs'
+                }
+            }
+        }
     }
 }
