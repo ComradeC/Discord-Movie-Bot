@@ -1,13 +1,12 @@
 # quotes_db_commands.py
 import sys
 import time
-import psycopg2
+from dbcon import *
 
 # external modules
 from nextcord.ext import commands
 
-#conn = psycopg2.connect(dbname='moviebotdb', user='postgres', password='admin')    #local test connection
-conn = psycopg2.connect(dbname='postgres', user='root', password='root')            #public server connection
+
 
 class Quotes(commands.Cog):
 
