@@ -1,68 +1,88 @@
-import random
-from dbcon import *
-
+# basic modules
 
 # external modules
-import nextcord
-#from nextcord.ext import commands
-#from nextcord import client
+from nextcord.ext import commands
+
+# local modules
+from dbcon import db_load
 
 
-
-class Movies(nextcord.ext.commands.Cog):
+class Movies(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @nextcord.ext.commands.Cog.listener()
+    @commands.Cog.listener()
     async def on_ready(self):
         print("MoviesDB cog loaded successfully")
 
+    @commands.command(name="add_movie", aliases=["am", "добавить_фильм", "дф"], help="Добавляет фильм в список, чтобы посмотреть его позже")
+    async def add_movie(self, ctx, movie):
+        movie = (movie, False)
+        status = db_load("insert", "movies", movie)
+        if status != "INSERT 0":
+            await ctx.message.add_reaction("👍")
+        else:
+            await ctx.message.add_reaction("❓")
 
-    @nextcord.ext.commands.command(name="add_movie", aliases=["movie", "фильм", "посмотреть"], help="Добавляет фильм в список, чтобы посмотреть его позже")
-    async def addMovieDB(self, ctx, movie):
-        cur = conn.cursor()
-        cur.execute("INSERT INTO MOVIES (title, watched) values (%s, false);", [movie])
-        conn.commit()
-        cur.close()
-        await ctx.message.add_reaction("👍")
+#    # debug command. Commented for the time being.
+#    @commands.command(name="movies_all", aliases=[], help="Печатает список всех фильмов в БД")
+#    async def print_movies(self, ctx):
+#        movie_list = list()
+#        cur = conn.cursor()
+#        cur.execute("SELECT * FROM movies")
+#        for _ in range(cur.rowcount):
+#            movie_list += (cur.fetchone())
+#        await ctx.send(movie_list)
 
+    @commands.command(name="movies_watch", aliases=["movies", "movie", "кино", "фильмы"], help="Печатает список еще непросмотренных фильмов в БД")
+    async def print_movies_unwatched(self, ctx):
+        movie_list = db_load("select", "movies", "title", "not_watched")
+        for movie in movie_list:
+            await ctx.send(movie[0])
 
-    @nextcord.ext.commands.command(name="moviesall", aliases=[], help="Печатает список всех фильмов в БД")
-    async def printMoviesDBAll(self, ctx):
-        movie_list = list()
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM movies")
-        for i in range(cur.rowcount):
-            movie_list += (cur.fetchone())
-            # await ctx.send()
-        await ctx.send(movie_list)
-
-
-    @nextcord.ext.commands.command(name="movieswatch", aliases=["watch", "смотреть"], help="Печатает список еще несмотренных фильмов в БД")
-    async def printMoviesDBUnwatched(self, ctx):
-        cur = conn.cursor()
-        watchlist=list()
-        repeats=list()
-        m = 0
-        cur.execute("SELECT title FROM movies where watched=false")
-        for i in range(cur.rowcount):
-            watchlist+=cur.fetchone()
-        while (len(repeats)<5):
-            j=random.randint(0,len(watchlist)-1)
-            repeats.append(watchlist[j])
-        for i in range(len(repeats)):
-            msg = await ctx.send(repeats[i])
-            await msg.add_reaction('☑')
-        cur.close()
-
-    @nextcord.ext.commands.command(name="deletemovie", aliases=["удалифильм"], help="Удаляет фильм из базы данных")
+    @commands.command(name="delete_movie", aliases=["dm", "удали_фильм", "уф"], help="Удаляет фильм из базы данных")
     async def delete_movie(self, ctx, movie):
-        cur = conn.cursor()
-        cur.execute("DELETE FROM movies WHERE title=%s", [movie])
-        conn.commit()
-        cur.close()
-        await ctx.message.add_reaction("⚡")
+        status = db_load("delete", "movies", movie)
+        if status != "DELETE 0":
+            await ctx.message.add_reaction("⚡")
+        else:
+            await ctx.message.add_reaction("❓")
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        emoji = payload.emoji.name
+        if emoji == "👁️":
+            channel = await self.bot.fetch_channel(payload.channel_id)
+            message = await channel.fetch_message(payload.message_id)
+            status = db_load("update", "movies", message.content)
+            if status != "UPDATE 0":
+                await message.add_reaction("👍")
+            else:
+                await message.add_reaction("❓")
+
+#    @MovieBot.event
+#    async def on_reaction_remove(self, reaction, user):
+#        print('So, you have chosen oblivion.')
+#        await reaction.message.channel.send(f'So, you have chosen oblivion.')
+#        if user != MovieBot.user:
+#            await reaction.message.channel.send(f'Увиденное не забудешь. Но я попробую.')
+#            cur = conn.cursor()
+#            cur.execute("update movies set watched=false where title=%s", [reaction.message.content])
+#            conn.commit()
+#            cur.close()
+
+#    @commands.Cog.listener()
+#    async def on_raw_reaction_add(self, payload):
+#        print(payload)
+#        channel = self.bot.get_channel(payload.channel_id)
+#        if self.bot.get_user(payload.user_id) != self.bot.user:
+#            await channel.send(f'Увиденное не забудешь. Но я попробую.')
+#            cur = conn.cursor()
+#            txt = await channel.fetch_message(payload.message_id)
+#            cur.execute("update movies set watched=false where title=%s", [str(txt.content)])
+#            conn.commit()
+#            cur.close()
 
 
 def setup(bot):
