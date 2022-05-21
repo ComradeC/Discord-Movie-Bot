@@ -1,6 +1,0 @@
-.idea/
-DBs/
-*.env
-/cogs/__pycache__/
-tests.py
-twitch_renew_code.py

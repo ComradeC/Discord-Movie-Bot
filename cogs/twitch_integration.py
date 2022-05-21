@@ -3,7 +3,6 @@
 # standard modules
 import requests
 import os
-import time
 import asyncio
 
 # external modules
