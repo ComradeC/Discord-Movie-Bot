@@ -1,30 +1,98 @@
-import psycopg2
+from sqlalchemy import create_engine, Column, Integer, String, Time, Boolean, select, delete, update
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import declarative_base, Session
 
-conn = psycopg2.connect(dbname='moviebotdb', user='postgres', password='rookie')  # local test connection
+Base = declarative_base()
 
 
-# conn = psycopg2.connect(dbname='postgres', user='root', password='root')          # public server connection
+class Movie(Base):
+    __tablename__ = "movies_db"
+
+    id = Column(Integer, primary_key=True)
+
+    title = Column(String, nullable=False)
+    watched_status = Column(Boolean)
+
+    def __repr__(self):
+        return f"Movie(id={self.id!r}, title={self.title!r})"
 
 
-def db_load(action, db_name, entity, *option):
-    with conn.cursor() as cur:
-        db_variations = {"movies": "(title, watched)",
-                         "quotes": "(text, movie_title, timestamp)"}
-        db_options = {"not_watched": "WHERE watched=false"}
-        if option == ():
-            option = ""
-        else:
-            option = db_options[option[0]]
+class Quote(Base):
+    __tablename__ = "quotes_db"
 
-        db_commands = {"insert": f"INSERT INTO {db_name} {db_variations[db_name]} VALUES {entity}",
-                       "select": f"SELECT {entity} FROM {db_name} {option}",
-                       "delete": f"DELETE FROM {db_name} WHERE {'title' if db_name == 'movies' else 'text'}='{entity}'",
-                       "update": f"UPDATE {db_name} SET watched=true WHERE title='{entity}'"}
+    id = Column(Integer, primary_key=True)
+    text = Column(String, nullable=False)
+    timestamp = Column(Time)
+    title = Column(String)
 
-        cur.execute(db_commands[action] + ";")
-        if action != "select":
-            conn.commit()
-            return cur.statusmessage
-        elif action == "select":
-            return cur.fetchall()
+    def __repr__(self):
+        return f"Quote(id={self.id!r}, text={self.text!r}, title={self.title!r}, timestamp={self.timestamp!r})"
+
+
+engine = create_engine('postgresql://Commi:1537@localhost:5432/postgres', echo=True, future=True)
+Base.metadata.create_all(engine)  # For db creation
+
+
+# adding movie to DBs
+def db_add_movie(title):
+    with Session(engine) as session:
+        try:
+            movie = Movie(title=title, watched_status=False)
+            session.add(movie)
+            session.commit()
+        except SQLAlchemyError:
+            return "Error"
+
+
+def db_add_quote(text, title, timestamp):
+    with Session(engine) as session:
+        try:
+            quote = Quote(text=text, title=title, timestamp=timestamp)
+            session.add(quote)
+            session.commit()
+        except SQLAlchemyError:
+            return "Error"
+
+
+def db_select(db_name, *args):
+    with Session(engine) as session:
+        if db_name == "movies":
+            if args:
+                if args[0].lower() == "all":
+                    stmt = select(Movie.title)
+            else:
+                stmt = select(Movie.title).where(Movie.watched_status == "False")
+            return session.execute(stmt).scalars()
+        elif db_name == "quotes":
+            return session.query(Quote).with_entities(Quote.text, Quote.title, Quote.timestamp)
+
+
+def db_delete(db_name, entity):
+    with Session(engine) as session:
+        try:
+            if db_name == "movies":
+                stmt = delete(Movie).where(Movie.title == entity).returning(Movie.title)
+            elif db_name == "quotes":
+                stmt = delete(Quote).where(Quote.text == entity).returning(Quote.text)
+
+            result = session.execute(stmt)
+            print(result.rowcount)
+            if result.rowcount == 0:
+                print(result.rowcount)
+                return "Error"
+            session.commit()
+        except SQLAlchemyError:
+            return "Error"
+
+
+def db_movie_set_watched(entity):
+    with Session(engine) as session:
+        try:
+            stmt = update(Movie).where(Movie.title == entity).values(watched_status=True).returning(Movie.title)
+            result = session.execute(stmt)
+            if result.rowcount == 0:
+                return "Error"
+            session.commit()
+        except SQLAlchemyError:
+            return "Error"
 

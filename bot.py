@@ -1,7 +1,6 @@
 # bot.py
 
 # standard modules
-import requests
 import os
 
 # external modules
@@ -13,8 +12,6 @@ from dotenv import load_dotenv
 from cogs import movies_commands, quotes_commands  # twitch_integration
 
 load_dotenv()
-reqSession = requests.Session()
-
 
 MovieBot = commands.Bot(command_prefix="!", intends=nextcord.Intents.all())
 
