@@ -15,7 +15,6 @@ load_dotenv()
 
 MovieBot = commands.Bot(command_prefix="!", intends=nextcord.Intents.all())
 
-# MovieBot.add_cog(twitch_integration.Integration(MovieBot))
 MovieBot.add_cog(movies_commands.Movies(MovieBot))
 MovieBot.add_cog(quotes_commands.Quotes(MovieBot))
 

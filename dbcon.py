@@ -13,6 +13,9 @@ class Movie(Base):
     title = Column(String, nullable=False)
     watched_status = Column(Boolean)
 
+    kp_id = Column(Integer)
+    imdb_id  = Column(Integer)
+
     def __repr__(self):
         return f"Movie(id={self.id!r}, title={self.title!r})"
 

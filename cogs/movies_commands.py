@@ -34,7 +34,7 @@ class Movies(commands.Cog):
             movie_list = db_select("movies")
 
         msg = await ctx.send("Movie list")
-        thread = await msg.create_thread(name="Movie list", auto_archive_duration=60)
+        thread = await msg.create_thread(name="Movie list", auto_archive_duration=120)
         for movie in movie_list:
             await thread.send(movie)
 

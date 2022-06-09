@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Bot</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.svg') }}" type="image/x-icon"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+<div>
+    {% if data %}
+    <table>
+        <caption><h2>Our glorious MovieDB, long may it reign</h2></caption>
+        <thead>
+            <tr>
+                <th scope="col">Movie Title</th>
+                <th scope="col">Watched Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie in data %}
+            <tr>
+                <th scope="row">{{ movie.title }}</th>
+                <td>{{ movie.watched_status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+</body>
+</html>
