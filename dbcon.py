@@ -13,8 +13,8 @@ class Movie(Base):
     title = Column(String, nullable=False)
     watched_status = Column(Boolean)
 
-    kp_id = Column(Integer)
-    imdb_id  = Column(Integer)
+    kp_id = Column(String)
+    imdb_id = Column(String)
 
     def __repr__(self):
         return f"Movie(id={self.id!r}, title={self.title!r})"
@@ -33,14 +33,14 @@ class Quote(Base):
 
 
 engine = create_engine('postgresql://Commi:1537@localhost:5432/postgres', echo=True, future=True)
-Base.metadata.create_all(engine)  # For db creation
+# Base.metadata.create_all(engine)  # For db creation
 
 
 # adding movie to DBs
-def db_add_movie(title):
+def db_add_movie(title, kp_id, imdb_id):
     with Session(engine) as session:
         try:
-            movie = Movie(title=title, watched_status=False)
+            movie = Movie(title=title, watched_status=False, kp_id=kp_id, imdb_id=imdb_id)
             session.add(movie)
             session.commit()
         except SQLAlchemyError:

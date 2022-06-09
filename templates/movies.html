@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
 </head>
 <body>
+<div>CPU load: {{ cpu_load }}%</div>
+<div>Memory load: {{ memory_load }}%</div>
 <div>
     {% if data %}
     <table>
@@ -15,13 +17,17 @@
             <tr>
                 <th scope="col">Movie Title</th>
                 <th scope="col">Watched Status</th>
+                <th scope="col">KP link</th>
+                <th scope="col">IMDB link</th>
             </tr>
         </thead>
         <tbody>
             {% for movie in data %}
             <tr>
                 <th scope="row">{{ movie.title }}</th>
-                <td>{{ movie.watched_status }}</td>
+                <th scope="row">{{ movie.watched_status }}</th>
+                {% if movie.kp_id %}<td><a href="https://www.kinopoisk.ru/film/{{ movie.kp_id }}/">{{ movie.kp_id }}</a></td>{% endif %}
+                {% if movie.imdb_id %}<td><a href="https://www.imdb.com/title/{{ movie.imdb_id }}/">{{ movie.imdb_id }}</a></td>{% endif %}
             </tr>
             {% endfor %}
         </tbody>

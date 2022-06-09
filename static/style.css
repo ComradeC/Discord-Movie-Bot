@@ -5,3 +5,14 @@ table {
 th, td {
   border: 1px solid black;
 }
+div {
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  border: 3px black;
+  padding: 10px;
+}
+table {
+  margin: auto;
+  width: 50%;
+  }
