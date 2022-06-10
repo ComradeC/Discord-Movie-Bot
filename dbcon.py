@@ -1,6 +1,9 @@
+import os
+
 from sqlalchemy import create_engine, Column, Integer, String, Time, Boolean, select, delete, update
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import declarative_base, Session
+from dotenv import load_dotenv
 
 Base = declarative_base()
 
@@ -32,7 +35,8 @@ class Quote(Base):
         return f"Quote(id={self.id!r}, text={self.text!r}, title={self.title!r}, timestamp={self.timestamp!r})"
 
 
-engine = create_engine('postgresql://Commi:1537@localhost:5432/postgres', echo=True, future=True)
+load_dotenv()
+engine = create_engine('postgresql://' + os.environ["SQL_SECRET"] + '/postgres', echo=True, future=True)
 # Base.metadata.create_all(engine)  # For db creation
 
 

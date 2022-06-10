@@ -1,18 +1,68 @@
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  text-align:center
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
 table {
   border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 th, td {
   border: 1px solid black;
+  text-align:center
+  margin-left: auto;
+  margin-right: auto;
 }
-div {
-  margin: auto;
-  width: 50%;
+
+.button {
+  background-color: #e7e7e7; /* gray */
+  border: 2px solid #555555; /* black */
+  border-radius: 2px;
+  color: black;
+  padding: 20px 40px;
   text-align: center;
-  border: 3px black;
-  padding: 10px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 24px;
+  transition-duration: 0.4s;
 }
-table {
-  margin: auto;
-  width: 50%;
-  }
+.button:hover {
+  background-color: #4CAF50; /* Green */
+  color: white;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.leftpane {
+    width: 25%;
+    height: 100%;
+    float: left;
+    display: flex;
+    align-items: center;
+    border-collapse: collapse;
+}
+
+.middlepane {
+    width: 50%;
+    height: 100%;
+    float: left;
+    display: flex;
+    align-items: center;
+    border-collapse: collapse;
+}
+
+.rightpane {
+  width: 25%;
+  height: 100%;
+  position: relative;
+  float: right;
+
+  border-collapse: collapse;
+}
