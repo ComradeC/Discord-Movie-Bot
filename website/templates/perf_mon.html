@@ -1,3 +1,5 @@
+{% extends "main.html" %}
+{% block center_content %}
 <table>
     <thead>
     <tr>
@@ -7,9 +9,9 @@
     </thead>
     <tbody>
     <tr>
-        <th>{{ cpu_load }}%</th>
-        <th>{{ memory_load }}%</th>
+        <th>{{ perf_data.cpu_load }}%</th>
+        <th>{{ perf_data.memory_load }}%</th>
     </tr>
     </tbody>
 </table>
-
+{% endblock %}

@@ -1,12 +1,10 @@
 # basic modules
 
 # external modules
-import nextcord
 from nextcord.ext import commands
-from nextcord import message
 
 # local modules
-from dbcon import db_add_movie, db_select, db_delete, db_movie_set_watched
+from .bot_db_commands import db_add_movie, db_select, db_movie_set_watched, db_delete
 from id_lookup import kp_id_lookup, imdb_id_lookup
 
 
@@ -30,7 +28,7 @@ class Movies(commands.Cog):
         else:
             await ctx.message.add_reaction("👍")
             if kp_id:
-                emoji = "<\U0001F1F0>"  # k for kinopoisk
+                emoji = "<\U0001F1F0>"  # "k" for kinopoisk
                 await ctx.message.add_reaction(emoji)
             if imdb_id:
                 emoji = "\U00002139>"  # "i" for imdb
