@@ -5,12 +5,11 @@ import requests
 
 # external modules
 from bs4 import BeautifulSoup as Soupify
-from fake_useragent import UserAgent
 from sqlalchemy import select, update
 
 # local modules
-from website.models import MovieModel
-from website.settings import Session
+from models import MovieModel
+from bot.settings import Session
 
 
 def title_to_query(title):
@@ -19,8 +18,7 @@ def title_to_query(title):
 
 
 def kp_id_lookup(title):
-    ua = UserAgent()
-    headers = {'User-Agent': str(ua.chrome)}
+    headers = {'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"}
     response = requests.get(f"https://www.kinopoisk.ru/index.php?kp_query={title_to_query(title)}", headers=headers)
     if response.history:
         print(response.url)
