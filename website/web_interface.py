@@ -13,9 +13,9 @@ from flask_wtf import CSRFProtect
 import psutil
 
 # local modules
-from website.models import UserModel, MovieModel, QuoteModel
-from website.settings import FLASK_APP_SECRET, Session
-from website.id_lookup import kp_id_lookup, imdb_id_lookup
+from models import UserModel, MovieModel, QuoteModel
+from settings import FLASK_APP_SECRET, Session
+from id_lookup import kp_id_lookup, imdb_id_lookup
 
 app = Flask(__name__)
 app.secret_key = FLASK_APP_SECRET

@@ -9,8 +9,8 @@ from fake_useragent import UserAgent
 from sqlalchemy import select, update
 
 # local modules
-from website.models import MovieModel
-from website.settings import Session
+from models import MovieModel
+from settings import Session
 
 
 def title_to_query(title):
