@@ -1,12 +1,12 @@
-# bot_db_commands.py
+# db_commands.py
 
 # external modules
 from sqlalchemy import select, delete, update
 from sqlalchemy.exc import SQLAlchemyError
 
 # local modules
-from models import MovieModel, QuoteModel
-from settings import Session
+from .models import MovieModel, QuoteModel
+from bot.settings import Session
 
 
 def db_add_movie(title, kp_id, imdb_id):

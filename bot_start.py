@@ -1,14 +1,14 @@
-# bot.py
+# bot_start.py
 
 # external modules
 import nextcord
 from nextcord.ext import commands
 
 # local modules
-from settings import DISCORD_TOKEN
+from bot.settings import DISCORD_TOKEN
 
 # cogs
-from cogs import movies_commands, quotes_commands
+from bot.cogs import movies_commands, quotes_commands
 
 
 MovieBot = commands.Bot(command_prefix="!", intends=nextcord.Intents.all())

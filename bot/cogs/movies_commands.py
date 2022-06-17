@@ -4,8 +4,8 @@
 from nextcord.ext import commands
 
 # local modules
-from .bot_db_commands import db_add_movie, db_select, db_movie_set_watched, db_delete
-from id_lookup import kp_id_lookup, imdb_id_lookup
+from bot.tools.db_commands import db_add_movie, db_select, db_movie_set_watched, db_delete
+from bot.tools.id_lookup import kp_id_lookup, imdb_id_lookup
 
 
 class Movies(commands.Cog):
