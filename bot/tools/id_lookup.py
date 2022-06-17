@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup as Soupify
 from sqlalchemy import select, update
 
 # local modules
-from models import MovieModel
+from .models import MovieModel
 from bot.settings import Session
 
 
