@@ -1,21 +1,18 @@
-# bot.py
-
-# standard modules
-import os
+# bot_start.py
 
 # external modules
 import nextcord
 from nextcord.ext import commands
-from dotenv import load_dotenv
+
+# local modules
+from bot.settings import DISCORD_TOKEN
 
 # cogs
-from cogs import movies_commands, quotes_commands  # twitch_integration
+from bot.cogs import movies_commands, quotes_commands
 
-load_dotenv()
 
 MovieBot = commands.Bot(command_prefix="!", intends=nextcord.Intents.all())
 
-# MovieBot.add_cog(twitch_integration.Integration(MovieBot))
 MovieBot.add_cog(movies_commands.Movies(MovieBot))
 MovieBot.add_cog(quotes_commands.Quotes(MovieBot))
 
@@ -29,4 +26,4 @@ async def on_ready():
 async def hello(ctx):
     await ctx.send("Драсти")
 
-MovieBot.run(os.environ["DISCORD_TOKEN"])
+MovieBot.run(DISCORD_TOKEN)

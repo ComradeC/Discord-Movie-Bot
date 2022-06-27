@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container">
+      <h1>Signup</h1>
+      <br>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+      <form action="/signup" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+          <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}">
+          <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}">
+          <input type="password" placeholder="Repeat password" name="repeat_password" value="{{
+          request.form.repeat_password }}">
+        <input class="btn btn-default" type="submit" value="Sign up">
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+</body>
+</html>

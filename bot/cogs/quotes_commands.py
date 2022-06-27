@@ -4,7 +4,7 @@
 from nextcord.ext import commands
 import re
 # local modules
-from dbcon import db_add_quote, db_select, db_delete
+from bot.tools.db_commands import db_select, db_delete, db_add_quote
 
 
 class Quotes(commands.Cog):
