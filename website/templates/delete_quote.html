@@ -1,0 +1,18 @@
+<!-- Modal -->
+<div id="delete{{ quote.id }}" class="w3-modal">
+  <div class="w3-modal-content">
+    <div class="w3-container">
+      <span onclick="document.getElementById('delete{{ quote.id }}').style.display='none'"
+            class="w3-button w3-display-topright">&times;</span>
+        <form method="post" action="{{ url_for('delete_quote', quote_id=quote.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div>Are you sure you want to delete quote "{{ quote.text }}"?</div>
+            <div>
+                <input class="btn" type="submit" name="delete" value="Delete">
+                <a onclick="document.getElementById('delete{{ quote.id }}').style.display='none'" name="cancel"><button type="reset">Cancel</button></a>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<!-- End modal -->

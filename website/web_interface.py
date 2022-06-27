@@ -8,12 +8,13 @@ import flask_login
 from flask import Flask, request, render_template, redirect, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import select, delete, update
+from sqlalchemy.sql.expression import func
 from flask_login import LoginManager, login_required
 from flask_wtf import CSRFProtect
 import psutil
 
 # local modules
-from models import UserModel, MovieModel, QuoteModel
+from models import UserModel, MovieModel, QuoteModel, DowQuoteModel
 from settings import FLASK_APP_SECRET, Session
 from id_lookup import kp_id_lookup, imdb_id_lookup
 
@@ -58,7 +59,8 @@ def request_loader(r):
 def quotes():
     with Session() as db_session:
         data = db_session.scalars(select(QuoteModel))
-        return render_template('quotes.html', data=data)
+        dow_quote = db_session.execute(select(DowQuoteModel.text).order_by(func.random())).fetchone()
+        return render_template('quotes.html', data=data, dow_quote=dow_quote[0])
 
 
 @app.route('/movies')
@@ -167,6 +169,30 @@ def update_movie(movie_id):
     return redirect('/movies')
 
 
+@app.route('/quotes/delete/<int:quote_id>', methods=['POST'])
+@login_required
+def delete_quote(quote_id):
+    with Session() as db_session:
+        db_session.execute(delete(QuoteModel).where(QuoteModel.id == quote_id))
+        db_session.commit()
+    return redirect('/quotes')
+
+
+@app.route('/quotes/update/<int:quote_id>', methods=['POST'])
+@login_required
+def update_quote(quote_id):
+    with Session() as db_session:
+        text = request.form['text']
+        title = request.form['title']
+        timestamp = request.form['timestamp']
+
+        db_session.execute(update(QuoteModel)
+                           .where(QuoteModel.id == quote_id)
+                           .values(text=text, title=title, timestamp=timestamp))
+        db_session.commit()
+    return redirect('/quotes')
+
+
 @app.route('/movies/new', methods=['POST'])
 @login_required
 def new_movie():
@@ -179,6 +205,20 @@ def new_movie():
         db_session.add(movie)
         db_session.commit()
     return redirect('/movies')
+
+
+@app.route('/quotes/new', methods=['POST'])
+@login_required
+def new_quote():
+    with Session() as db_session:
+        text = request.form['text']
+        title = request.form['title']
+        timestamp = request.form['timestamp']
+        quote = QuoteModel(text=text, title=title, timestamp=timestamp)
+
+        db_session.add(quote)
+        db_session.commit()
+    return redirect('/quotes')
 
 
 @app.route('/performance')
@@ -194,4 +234,4 @@ if __name__ == '__main__':
         arg_host, arg_port = sys.argv[1].split(':')
         app.run(host=arg_host, port=arg_port)
     else:
-        app.run(host="25.62.170.90")
+        app.run(host="0.0.0.0", port=5000)

@@ -14,6 +14,8 @@
     {% if current_user.is_authenticated %}
     <li><a style="cursor: pointer" onclick="document.getElementById('new_movie').style.display='block'">Add movie</a></li>
     {% include "new_movie_form.html" %}
+    <li><a style="cursor: pointer" onclick="document.getElementById('new_quote').style.display='block'">Add quote</a></li>
+    {% include "new_quote_form.html" %}
     <li><a href="performance">System</a></li>
     <li class="list-login"><a href="logout">Logout</a></li>
     <li class="list-login" style="color: white;
@@ -27,7 +29,7 @@
     {% endif %}
 </ul>
 <div class="leftpane">{% block left_content %} {% endblock %}</div>
-<div class="rightpane">
+<div class="rightpane">{% block right_content %} {% endblock %}
 </div>
 <div class="middlepane" style="overflow-x:auto;">{% block center_content %} {% endblock %}</div>
 </body>

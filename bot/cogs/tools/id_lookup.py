@@ -9,7 +9,7 @@ from sqlalchemy import select, update
 
 # local modules
 from .models import MovieModel
-from bot.settings import Session
+from .settings import Session
 
 
 def title_to_query(title):

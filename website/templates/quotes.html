@@ -8,17 +8,36 @@
                 <th scope="col">Quote</th>
                 <th scope="col">Movie</th>
                 <th scope="col">Timestamp</th>
+                {% if current_user.is_authenticated %}
+                <th></th>
+                <th></th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for quote in data %}
             <tr>
-                <th scope="row">{{ quote.text }}</th>
-                {% if quote.title %}<td>{{ quote.title }}</td>{% endif %}
-                {% if quote.timestamp %}<td>{{ quote.timestamp }}</td>{% endif %}
+                <td scope="row">{{ quote.text }}</td>
+                <td>{% if quote.title %}{{ quote.title }}{% endif %}</td>
+                <td>{% if quote.timestamp %}{{ quote.timestamp }}{% endif %}</td>
+                {% if current_user.is_authenticated %}
+                <td>
+                    <button onclick="document.getElementById('edit{{ quote.id }}').style.display='block'" class="btn">Edit</button>
+                    {% include "edit_quote.html" %}
+                </td>
+                <td>
+                    <button onclick="document.getElementById('delete{{ quote.id }}').style.display='block'" class="btn">Delete</button>
+                    {% include "delete_quote.html" %}
+                </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% endif %}
+{% endblock %}
+{% block right_content %}
+    {% if current_user.is_authenticated %}
+        {% if dow_quote %} {{ dow_quote }} {% endif %}
     {% endif %}
 {% endblock %}

@@ -1,0 +1,22 @@
+<!-- Modal -->
+<div id="edit{{ quote.id }}" class="w3-modal">
+  <div class="w3-modal-content">
+    <div class="w3-container">
+      <span onclick="document.getElementById('edit{{ quote.id }}').style.display='none'"
+            class="w3-button w3-display-topright">&times;</span>
+        <form method="post" action="{{ url_for('update_quote', quote_id=quote.id) }}" style="text-align: left">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div>Edit quote</div>
+            <div>Text:<input type="text" placeholder="{{ quote.text }}" name="text" value="{{ quote.text }}"></div>
+            <div>Movie:<input type="text" placeholder="{{ quote.title }}" name="title" value="{{ quote.title }}"></div>
+            <div>Timecode:<input type="text" placeholder="{{ quote.timestamp }}" name="timestamp" value="{{ quote.timestamp }}"></div>
+
+            <div>
+                <input class="btn" type="submit" name="submit" value="Submit">
+                <a onclick="document.getElementById('edit{{ quote.id }}').style.display='none'" name="cancel"><button type="reset">Cancel</button></a>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<!-- End modal -->

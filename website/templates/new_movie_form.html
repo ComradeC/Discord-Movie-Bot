@@ -7,7 +7,7 @@
         <form method="post" action="{{ url_for('new_movie') }}" style="text-align: left">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div>Add movie</div>
-            <div>Title:<input type="text" name="title"></div>
+            <div>Title:<input type="text" name="title" required></div>
             <div>
                 <input class="btn" type="submit" name="submit" value="Submit">
                 <a onclick="document.getElementById('new_movie').style.display='none'" name="cancel"><button type="reset">Cancel</button></a>

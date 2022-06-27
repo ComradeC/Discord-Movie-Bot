@@ -42,11 +42,11 @@
                 {% if current_user.is_authenticated %}
                 <td>
                     <button onclick="document.getElementById('edit{{ movie.id }}').style.display='block'" class="btn">Edit</button>
-                    {% include "edit_form.html" %}
+                    {% include "edit_movie.html" %}
                 </td>
                 <td>
                     <button onclick="document.getElementById('delete{{ movie.id }}').style.display='block'" class="btn">Delete</button>
-                    {% include "delete_form.html" %}
+                    {% include "delete_movie.html" %}
                 </td>
                 {% endif %}
             </tr>
