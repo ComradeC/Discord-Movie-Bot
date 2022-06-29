@@ -2,6 +2,7 @@
 
 # standard modules
 import requests
+import asyncio
 
 # external modules
 from bs4 import BeautifulSoup as Soupify
@@ -17,7 +18,7 @@ def title_to_query(title):
     return query
 
 
-def kp_id_lookup(title):
+async def kp_id_lookup(title):
     headers = {'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"}
     response = requests.get(f"https://www.kinopoisk.ru/index.php?kp_query={title_to_query(title)}", headers=headers)
     if response.history:
@@ -36,7 +37,7 @@ def kp_id_lookup(title):
     return kp_id
 
 
-def imdb_id_lookup(title):
+async def imdb_id_lookup(title):
     data = requests.get(f"https://www.imdb.com/find?q={title_to_query(title)}")
     soup = Soupify(data.content, "html.parser")
     try:
@@ -45,6 +46,9 @@ def imdb_id_lookup(title):
     except AttributeError:
         return None
 
+
+async def id_gather(title):
+    return await asyncio.gather(kp_id_lookup(title), imdb_id_lookup(title))
 
 # manual id lookup
 if __name__ == '__main__':

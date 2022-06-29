@@ -2,6 +2,7 @@
 
 # standard modules
 import sys
+import asyncio
 
 # external modules
 import flask_login
@@ -16,7 +17,7 @@ import psutil
 # local modules
 from models import UserModel, MovieModel, QuoteModel, DowQuoteModel
 from settings import FLASK_APP_SECRET, Session
-from id_lookup import kp_id_lookup, imdb_id_lookup
+from id_lookup import id_gather
 
 app = Flask(__name__)
 app.secret_key = FLASK_APP_SECRET
@@ -198,8 +199,9 @@ def update_quote(quote_id):
 def new_movie():
     with Session() as db_session:
         title = request.form['title']
-        kp_id = kp_id_lookup(title)
-        imdb_id = imdb_id_lookup(title)
+        ids = asyncio.run(id_gather(title))
+        kp_id = ids[0]
+        imdb_id = ids[1]
         movie = MovieModel(title=title, watched_status=False, kp_id=kp_id, imdb_id=imdb_id)
 
         db_session.add(movie)
@@ -234,4 +236,4 @@ if __name__ == '__main__':
         arg_host, arg_port = sys.argv[1].split(':')
         app.run(host=arg_host, port=arg_port)
     else:
-        app.run(host="0.0.0.0", port=5000)
+        app.run(host="127.0.0.1", port=5000)

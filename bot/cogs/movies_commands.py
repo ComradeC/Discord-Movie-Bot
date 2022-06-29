@@ -1,4 +1,5 @@
 # basic modules
+import asyncio
 
 # external modules
 from nextcord.ext import commands
@@ -6,7 +7,7 @@ import nextcord
 
 # local modules
 from .tools.db_commands import db_add_movie, db_select, db_movie_set_watched, db_delete, db_select_all, db_movie_set_not_watched
-from .tools.id_lookup import kp_id_lookup, imdb_id_lookup
+from .tools.id_lookup import id_gather
 
 
 class Movies(commands.Cog, nextcord.ClientCog):
@@ -22,14 +23,16 @@ class Movies(commands.Cog, nextcord.ClientCog):
                             description="Добавляет фильм в список, чтобы посмотреть его позже",
                             guild_ids=[962235918150955008, 757218832111763557])
     async def add_movie(self, interaction: nextcord.Interaction, title):
-        kp_id = kp_id_lookup(title)
-        imdb_id = imdb_id_lookup(title)
+        ids = asyncio.run(id_gather(title))
+        kp_id = ids[0]
+        imdb_id = ids[1]
 
         status = db_add_movie(title, kp_id, imdb_id)
         if status == "Error":
             await interaction.response.send_message("Something went wrong.")
         else:
-            msg = await nextcord.PartialInteractionMessage.fetch(await interaction.response.send_message(f"{title} has been added."))
+            msg = await nextcord.PartialInteractionMessage.fetch(
+                await interaction.response.send_message(f"{title} has been added."))
             if kp_id:
                 emoji = "<\U0001F1F0>"  # "k" for kinopoisk
                 await msg.add_reaction(emoji)
