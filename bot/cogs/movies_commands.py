@@ -23,7 +23,7 @@ class Movies(commands.Cog, nextcord.ClientCog):
                             description="Добавляет фильм в список, чтобы посмотреть его позже",
                             guild_ids=[962235918150955008, 757218832111763557])
     async def add_movie(self, interaction: nextcord.Interaction, title):
-        ids = asyncio.run(id_gather(title))
+        ids = await id_gather(title)
         kp_id = ids[0]
         imdb_id = ids[1]
 
