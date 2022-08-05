@@ -23,16 +23,18 @@ class Movies(commands.Cog, nextcord.ClientCog):
                             description="Добавляет фильм в список, чтобы посмотреть его позже",
                             guild_ids=[962235918150955008, 757218832111763557])
     async def add_movie(self, interaction: nextcord.Interaction, title):
+        await interaction.response.defer(with_message="Just a sec...", ephemeral=True)
         ids = await id_gather(title)
         kp_id = ids[0]
         imdb_id = ids[1]
 
         status = db_add_movie(title, kp_id, imdb_id)
         if status == "Error":
-            await interaction.response.send_message("Something went wrong.")
+            await interaction.followup.send("Something went wrong.")
         else:
-            msg = await nextcord.PartialInteractionMessage.fetch(
-                await interaction.response.send_message(f"{title} has been added."))
+            await interaction.followup.send(f"Jobs done!")
+
+            msg = await interaction.channel.send(f"{title} has been added to the Movie List")
             if kp_id:
                 emoji = "<\U0001F1F0>"  # "k" for kinopoisk
                 await msg.add_reaction(emoji)
@@ -63,7 +65,6 @@ class Movies(commands.Cog, nextcord.ClientCog):
         msg = await nextcord.PartialInteractionMessage.fetch(await interaction.response.send_message("Movie list"))
         thread = await msg.create_thread(name="Movie list", auto_archive_duration=1440)
         for movie in movie_list:
-            print(movie)
             await thread.send(movie)
 
     @nextcord.message_command(name="delete_movie",
