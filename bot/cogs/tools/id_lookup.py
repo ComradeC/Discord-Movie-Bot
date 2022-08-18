@@ -22,7 +22,6 @@ async def kp_id_lookup(title):
     headers = {'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"}
     response = requests.get(f"https://www.kinopoisk.ru/index.php?kp_query={title_to_query(title)}", headers=headers)
     if response.history:
-        print(response.url)
         if response.url.strip("https://www.kinopoisk.ru/film/").isnumeric():
             kp_id = response.url.strip("https://www.kinopoisk.ru/film/")
         else:
