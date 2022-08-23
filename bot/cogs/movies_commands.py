@@ -24,6 +24,7 @@ class Movies(commands.Cog, nextcord.ClientCog):
                             guild_ids=[962235918150955008, 757218832111763557])
     async def add_movie(self, interaction: nextcord.Interaction, title):
         await interaction.response.defer(with_message="Just a sec...", ephemeral=True)
+        username = interaction.user.name
         ids = await id_gather(title)
         kp_id = ids[0]
         imdb_id = ids[1]
@@ -34,7 +35,7 @@ class Movies(commands.Cog, nextcord.ClientCog):
         else:
             await interaction.followup.send(f"Jobs done!")
 
-            msg = await interaction.channel.send(f"{title} has been added to the Movie List")
+            msg = await interaction.channel.send(f"{title} has been added to the Movie List by {username}")
             if kp_id:
                 emoji = "<\U0001F1F0>"  # "k" for kinopoisk
                 await msg.add_reaction(emoji)
