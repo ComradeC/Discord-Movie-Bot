@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, Time
 from sqlalchemy.orm import declarative_base
-from settings import engine
+from .settings import engine
 
 Base = declarative_base()
 
@@ -41,6 +41,16 @@ class UserModel(Base):
 
     def __repr__(self):
         return f"User(id={self.id!r}, username={self.username!r}, password={self.password!r})"
+
+
+class DowQuoteModel(Base):
+    __tablename__ = "dow_quote_db"
+
+    id = Column(Integer, primary_key=True)
+    text = Column(String, nullable=False)
+
+    def __repr__(self):
+        return f"DowQuote(id={self.id!r}, text={self.title!r})"
 
 
 if __name__ == '__main__':
