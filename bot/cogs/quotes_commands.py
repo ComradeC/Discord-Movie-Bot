@@ -15,7 +15,7 @@ class Quotes(commands.Cog, nextcord.ClientCog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("QuotesDB cog loaded successfully")
+        print("Quotes cog loaded successfully")
 
     @nextcord.slash_command(name="add_quote",
                             description="Увековечивает цитату в золотом фонде",

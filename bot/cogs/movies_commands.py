@@ -17,7 +17,7 @@ class Movies(commands.Cog, nextcord.ClientCog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("MoviesDB cog loaded successfully")
+        print("Movies cog loaded successfully")
 
     @nextcord.slash_command(name="add_movie",
                             description="Добавляет фильм в список, чтобы посмотреть его позже",
