@@ -9,7 +9,7 @@ import nextcord
 from cogs.tools.settings import DISCORD_TOKEN
 
 # cogs
-from cogs import movies_commands, quotes_commands, polls_commands
+from cogs import movies_commands, quotes_commands, polls_commands, karma_commands
 
 intents = nextcord.Intents.all()
 
@@ -17,6 +17,7 @@ MovieBot = commands.Bot(command_prefix="!", intents=intents)
 MovieBot.add_cog(movies_commands.Movies(MovieBot))
 MovieBot.add_cog(quotes_commands.Quotes(MovieBot))
 MovieBot.add_cog(polls_commands.Polls(MovieBot))
+MovieBot.add_cog(karma_commands.Karma(MovieBot))
 
 
 @MovieBot.event

@@ -1,5 +1,4 @@
 # basic modules
-import asyncio
 
 # external modules
 from nextcord.ext import commands
