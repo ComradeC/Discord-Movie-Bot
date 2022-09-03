@@ -24,6 +24,8 @@ class JoinButton(nextcord.ui.Button):
         embed_dict = msg.embeds[0].to_dict()
         if embed_dict['fields'][self.cat_id]['value'] == "none":
             embed_dict['fields'][self.cat_id]['value'] = interaction.user.name
+        elif interaction.user.name in embed_dict['fields'][self.cat_id]['value']:
+            pass
         else:
             embed_dict['fields'][self.cat_id]['value'] += "\n" + interaction.user.name
         new_embed = nextcord.Embed.from_dict(embed_dict)
@@ -51,13 +53,13 @@ class ViewPoll(nextcord.ui.View):
         modal = NewFieldModal()
         await interaction.response.send_modal(modal)
         await modal.wait()
-
-        embed_dict['fields'].append({'value': 'none', 'name': f'{modal.category_name.value}', 'inline': True})
-        new_embed = nextcord.Embed.from_dict(embed_dict)
-        new_button = JoinButton(label=f"Join {modal.category_name.value}", category_id=len(self.categories))
-        self.categories.append(modal.category_name.value)
-        view.add_item(new_button)
-        await msg.edit(embed=new_embed, view=view)
+        if modal.category_name.value.title() not in self.categories:
+            embed_dict['fields'].append({'value': 'none', 'name': f'{modal.category_name.value.title()}', 'inline': True})
+            new_embed = nextcord.Embed.from_dict(embed_dict)
+            new_button = JoinButton(label=f"Join {modal.category_name.value.title()}", category_id=len(self.categories))
+            self.categories.append(modal.category_name.value.title())
+            view.add_item(new_button)
+            await msg.edit(embed=new_embed, view=view)
 
     @nextcord.ui.button(label="Quit all", style=nextcord.ButtonStyle.red, row=3)
     async def callback(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
