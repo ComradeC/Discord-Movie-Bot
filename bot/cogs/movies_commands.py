@@ -5,7 +5,8 @@ from nextcord.ext import commands
 import nextcord
 
 # local modules
-from .tools.db_commands import db_add_movie, db_select, db_movie_set_watched, db_delete, db_select_all, db_movie_set_not_watched
+from .tools.db_commands import db_add_movie, db_select, db_movie_set_watched, db_delete, db_select_all,\
+    db_movie_set_not_watched
 from .tools.id_lookup import id_gather
 
 
