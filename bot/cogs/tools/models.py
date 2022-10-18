@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Time
+from sqlalchemy import Column, Integer, String, Boolean, Time, BigInteger
 from sqlalchemy.orm import declarative_base
 from .settings import engine
 
@@ -51,6 +51,18 @@ class DowQuoteModel(Base):
 
     def __repr__(self):
         return f"DowQuote(id={self.id!r}, text={self.title!r})"
+
+
+class MessageModel(Base):
+    __tablename__ = "message_db"
+
+    id = Column(BigInteger, primary_key=True)
+    text = Column(String, nullable=False)
+    author = Column(String, nullable=False)
+    toxicity = Column(Integer)
+
+    def __repr__(self):
+        return f"Message(id={self.id!r}, text={self.text!r}, author={self.author!r}, toxicity={self.toxicity!r})"
 
 
 if __name__ == '__main__':

@@ -8,6 +8,10 @@ from datetime import datetime, timedelta
 from nextcord.ext import commands
 import nextcord
 
+# local modules
+from .tools.db_commands import db_change_toxicity
+
+
 overuse_dict = {}
 
 
@@ -51,13 +55,15 @@ class Karma(commands.Cog, nextcord.ClientCog):
     async def on_raw_reaction_add(self, reaction):
         if reaction.emoji.name == "toxic" or reaction.emoji.name == "non_toxic":
             channel = self.bot.get_channel(reaction.channel_id)
-            msg_author = (await channel.fetch_message(reaction.message_id)).author
+            message = await channel.fetch_message(reaction.message_id)
+            msg_author = message.author
             if msg_author.id == reaction.user_id:
                 pass
             # we don't dis our bots here
             elif msg_author.bot is True:
                 if reaction.emoji.name == "toxic":
                     await reaction.member.send("Yeah, F you too!")
+                    await message.clear_reaction(reaction.emoji)
                 else:
                     pass
             else:
@@ -88,9 +94,14 @@ class Karma(commands.Cog, nextcord.ClientCog):
                 # finally calc karma change
                 else:
                     if reaction.emoji.name == "toxic":
-                        karma_change(karma_dict, msg_author, 1)
+                        karma_delta = 1
                     else:
-                        karma_change(karma_dict, msg_author, -1)
+                        karma_delta = -1
+                    karma_change(karma_dict, msg_author, karma_delta)
+                    db_change_toxicity(message_id=message.id,
+                                       author=msg_author.name,
+                                       text=message.content,
+                                       amount=karma_delta)
 
                 write_json(karma_dict)
 
@@ -98,7 +109,8 @@ class Karma(commands.Cog, nextcord.ClientCog):
     async def on_raw_reaction_remove(self, reaction):
         if reaction.emoji.name == "toxic" or reaction.emoji.name == "non_toxic":
             channel = self.bot.get_channel(reaction.channel_id)
-            msg_author = (await channel.fetch_message(reaction.message_id)).author
+            message = await channel.fetch_message(reaction.message_id)
+            msg_author = message.author
             if msg_author.id == reaction.user_id:
                 pass
             else:
@@ -106,16 +118,15 @@ class Karma(commands.Cog, nextcord.ClientCog):
                 karma_dict = open_json()
 
                 if reaction.emoji.name == "toxic":
-                    overuse_change(reaction.member.name, -1)
+                    karma_delta = -1
                 else:
-                    overuse_change(reaction.member.name, 1)
-
-                if msg_author.name not in karma_dict["karma"].keys():
-                    karma_dict["karma"][msg_author.name] = 0
-                if reaction.emoji.name == "toxic":
-                    karma_dict["karma"][msg_author.name] -= 1
-                elif reaction.emoji.name == "non_toxic":
-                    karma_dict["karma"][msg_author.name] += 1
+                    karma_delta = 1
+                overuse_change(reaction.member.name, karma_delta)
+                karma_change(karma_dict, msg_author, karma_delta)
+                db_change_toxicity(message_id=message.id,
+                                   author=msg_author.name,
+                                   text=message.content,
+                                   amount=karma_delta)
 
                 write_json(karma_dict)
 

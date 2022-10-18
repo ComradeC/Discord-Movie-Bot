@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 DISCORD_TOKEN = os.environ['DISCORD_TOKEN']
-engine = create_engine(os.environ['SQL_CONNECTION'], echo=False, future=True)
+engine = create_engine(os.environ['SQL_CONNECTION'], echo=True, future=True)
 
 Session = sessionmaker(engine)
 
