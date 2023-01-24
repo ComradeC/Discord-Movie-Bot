@@ -18,8 +18,7 @@ class Quotes(commands.Cog, nextcord.ClientCog):
         print("Quotes cog loaded successfully")
 
     @nextcord.slash_command(name="add_quote",
-                            description="Увековечивает цитату в золотом фонде",
-                            guild_ids=[962235918150955008, 757218832111763557])
+                            description="Увековечивает цитату в золотом фонде")
     async def add_quote(self, interaction: nextcord.Interaction, text, movie, timestamp):
         status = db_add_quote(text, movie, timestamp)
         if status == "Error":
@@ -28,8 +27,7 @@ class Quotes(commands.Cog, nextcord.ClientCog):
             await interaction.response.send_message(f'"{text}" from "{movie}" at {timestamp} is now part of the pantheon.')
 
     @nextcord.slash_command(name="quotes",
-                            description="Ваш карманный фонд золотых цитат",
-                            guild_ids=[962235918150955008, 757218832111763557])
+                            description="Ваш карманный фонд золотых цитат")
     async def print_quotes(self, interaction: nextcord.Interaction):
         quotes_list = db_select("quotes")
         print(quotes_list)
@@ -40,8 +38,7 @@ class Quotes(commands.Cog, nextcord.ClientCog):
             message = f'"{quote[0]}" from "{quote[1]}" at {quote[2]}'
             await thread.send(message)
 
-    @nextcord.message_command(name="delete_quote",
-                              guild_ids=[962235918150955008, 757218832111763557])
+    @nextcord.message_command(name="delete_quote")
     async def delete_quote(self, interaction: nextcord.Interaction, message: nextcord.Message):
         text = re.match(r'.+?(?= from)', message.content)[0].replace('"', '')
         print(text)
@@ -54,8 +51,7 @@ class Quotes(commands.Cog, nextcord.ClientCog):
             await interaction.response.send_message(f'Deleted "{text}"')
 
     @nextcord.slash_command(name="dow_quote",
-                            description="Выбирает случайную цитату из dow",
-                            guild_ids=[962235918150955008, 757218832111763557])
+                            description="Выбирает случайную цитату из dow")
     async def random_quote(self, interaction: nextcord.Interaction):
         quote = db_random_dow_quote()
         await interaction.response.send_message(quote)

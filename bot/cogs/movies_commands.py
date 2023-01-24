@@ -43,8 +43,7 @@ class Movies(commands.Cog, nextcord.ClientCog):
                 emoji = "<\U00002139>"  # "i" for imdb
                 await msg.add_reaction(emoji)
 
-    @nextcord.slash_command(name="movies",
-                            guild_ids=[962235918150955008, 757218832111763557])
+    @nextcord.slash_command(name="movies")
     async def movies(self, interaction: nextcord.Interaction):
         pass
 
@@ -68,8 +67,7 @@ class Movies(commands.Cog, nextcord.ClientCog):
         for movie in movie_list:
             await thread.send(movie)
 
-    @nextcord.message_command(name="delete_movie",
-                              guild_ids=[962235918150955008, 757218832111763557])
+    @nextcord.message_command(name="delete_movie")
     async def delete_movie(self, interaction: nextcord.Interaction, message: nextcord.Message):
         status = db_delete("movies", message.content)
         if status == "Error":
@@ -79,15 +77,13 @@ class Movies(commands.Cog, nextcord.ClientCog):
             await message.add_reaction("⚡")
             await interaction.response.send_message(f"Deleted {message.content}")
 
-    @nextcord.message_command(name="set_watched",
-                              guild_ids=[962235918150955008, 757218832111763557])
+    @nextcord.message_command(name="set_watched")
     async def set_watched(self, interaction: nextcord.Interaction, message: nextcord.Message):
         db_movie_set_watched(message.content)
         await message.add_reaction("👁️")
         await interaction.response.send_message(f"Flagged {message.content} as watched")
 
-    @nextcord.message_command(name="set_not_watched",
-                              guild_ids=[962235918150955008, 757218832111763557])
+    @nextcord.message_command(name="set_not_watched")
     async def set_not_watched(self, interaction: nextcord.Interaction, message: nextcord.Message):
         db_movie_set_not_watched(message.content)
         await message.clear_reaction("👁️")

@@ -85,8 +85,7 @@ class Polls(commands.Cog, nextcord.ClientCog):
     async def on_ready(self):
         print("Polls cog loaded successfully")
 
-    @nextcord.slash_command(name="poll",
-                            guild_ids=[962235918150955008, 757218832111763557])
+    @nextcord.slash_command(name="poll")
     async def poll(self, interaction: nextcord.Interaction):
         pass
 

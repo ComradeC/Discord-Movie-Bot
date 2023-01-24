@@ -130,8 +130,7 @@ class Karma(commands.Cog, nextcord.ClientCog):
 
                 write_json(karma_dict)
 
-    @nextcord.slash_command(name="karma",
-                            guild_ids=[962235918150955008, 757218832111763557])
+    @nextcord.slash_command(name="karma")
     async def karma(self, interaction: nextcord.Interaction):
         pass
 

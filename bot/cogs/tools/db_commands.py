@@ -24,7 +24,6 @@ def db_change_toxicity(message_id, amount, author, text):
     try:
         with Session() as session:
             if session.execute(select(MessageModel).where(MessageModel.id == message_id)).first():
-                print("Update")
                 stmt = update(MessageModel).where(MessageModel.id == message_id) \
                     .values(toxicity=MessageModel.toxicity + amount) \
                     .returning(MessageModel.toxicity)
@@ -34,7 +33,6 @@ def db_change_toxicity(message_id, amount, author, text):
                 else:
                     session.commit()
             else:
-                print("Insert")
                 message = MessageModel(id=message_id, author=author, text=text, toxicity=amount)
                 session.add(message)
                 session.commit()
