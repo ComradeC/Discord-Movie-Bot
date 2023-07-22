@@ -56,11 +56,10 @@ def fetch_imdb_id_from_kp(kp_id):
 
 
 async def id_gather(title):
-    imdb_id = imdb_id_lookup(title)
-    kp_id = kp_id_lookup(title)
+    kp_id, imdb_id = asyncio.gather(kp_id_lookup(title), imdb_id_lookup(title))
     if imdb_id is None and kp_id:
         imdb_id = fetch_imdb_id_from_kp(kp_id)
-    return await asyncio.gather(kp_id, imdb_id)
+    return kp_id, imdb_id
 
 # manual id lookup
 if __name__ == '__main__':
