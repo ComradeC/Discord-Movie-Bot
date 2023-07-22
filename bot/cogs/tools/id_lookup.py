@@ -10,7 +10,7 @@ from sqlalchemy import select, update
 
 # local modules
 from .models import MovieModel
-from .settings import Session
+from .settings import Session, KP_TOKEN
 
 
 def title_to_query(title):
@@ -46,8 +46,21 @@ async def imdb_id_lookup(title):
         return None
 
 
+def fetch_imdb_id_from_kp(kp_id):
+    headers = {
+        'X-API-KEY': KP_TOKEN,
+        'Content-Type': 'application/json',
+    }
+    data = requests.get(f"https://kinopoiskapiunofficial.tech/api/v2.2/films/{kp_id}", headers=headers).json()
+    return data['imdbId']
+
+
 async def id_gather(title):
-    return await asyncio.gather(kp_id_lookup(title), imdb_id_lookup(title))
+    imdb_id = imdb_id_lookup(title)
+    kp_id = kp_id_lookup(title)
+    if imdb_id is None and kp_id:
+        imdb_id = fetch_imdb_id_from_kp(kp_id)
+    return await asyncio.gather(kp_id, imdb_id)
 
 # manual id lookup
 if __name__ == '__main__':

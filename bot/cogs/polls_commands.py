@@ -54,7 +54,9 @@ class ViewPoll(nextcord.ui.View):
         await interaction.response.send_modal(modal)
         await modal.wait()
         if modal.category_name.value.title() not in self.categories:
-            embed_dict['fields'].append({'value': 'none', 'name': f'{modal.category_name.value.title()}', 'inline': True})
+            embed_dict['fields'].append({'value': 'none',
+                                         'name': f'{modal.category_name.value.title()}',
+                                         'inline': True})
             new_embed = nextcord.Embed.from_dict(embed_dict)
             new_button = JoinButton(label=f"Join {modal.category_name.value.title()}", category_id=len(self.categories))
             self.categories.append(modal.category_name.value.title())
@@ -83,8 +85,7 @@ class Polls(commands.Cog, nextcord.ClientCog):
     async def on_ready(self):
         print("Polls cog loaded successfully")
 
-    @nextcord.slash_command(name="poll",
-                            guild_ids=[962235918150955008, 757218832111763557])
+    @nextcord.slash_command(name="poll")
     async def poll(self, interaction: nextcord.Interaction):
         pass
 
