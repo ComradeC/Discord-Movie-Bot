@@ -18,7 +18,7 @@ def title_to_query(title):
     return query
 
 
-async def kp_id_lookup(title):
+def kp_id_lookup(title):
     headers = {'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"}
     response = requests.get(f"https://www.kinopoisk.ru/index.php?kp_query={title_to_query(title)}", headers=headers)
     if response.history:
@@ -36,17 +36,7 @@ async def kp_id_lookup(title):
     return kp_id
 
 
-async def imdb_id_lookup(title):
-    data = requests.get(f"https://www.imdb.com/find?q={title_to_query(title)}")
-    soup = Soupify(data.content, "html.parser")
-    try:
-        imdb_id = (soup.find("table", {"class": "findList"}).a["href"]).strip("/title/")
-        return "tt" + str(imdb_id)
-    except AttributeError:
-        return None
-
-
-def fetch_imdb_id_from_kp(kp_id):
+def imdb_id_lookup(kp_id):
     headers = {
         'X-API-KEY': KP_TOKEN,
         'Content-Type': 'application/json',
@@ -56,9 +46,8 @@ def fetch_imdb_id_from_kp(kp_id):
 
 
 async def id_gather(title):
-    kp_id, imdb_id = await asyncio.gather(kp_id_lookup(title), imdb_id_lookup(title))
-    if imdb_id is None and kp_id:
-        imdb_id = fetch_imdb_id_from_kp(kp_id)
+    kp_id = kp_id_lookup(title)
+    imdb_id = imdb_id_lookup(kp_id)
     return kp_id, imdb_id
 
 # manual id lookup
