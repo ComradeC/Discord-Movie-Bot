@@ -25,7 +25,7 @@ class Movies(commands.Cog, nextcord.ClientCog):
     async def add_movie(self, interaction: nextcord.Interaction, title):
         await interaction.response.defer(with_message="Just a sec...", ephemeral=True)
         username = interaction.user.name
-        ids = await id_gather(title)
+        ids = id_gather(title)
         kp_id = ids[0]
         imdb_id = ids[1]
 
