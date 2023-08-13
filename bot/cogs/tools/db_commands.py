@@ -74,11 +74,11 @@ def db_delete(db_name=str, entity=str):
     try:
         with Session() as session:
             if db_name == "movies":
-                stmt = delete(MovieModel).where(MovieModel.c.title == entity).returning(MovieModel.title)
+                stmt = delete(MovieModel).where(MovieModel.title == entity).returning(MovieModel.title)
             elif db_name == "quotes":
-                stmt = delete(QuoteModel).where(QuoteModel.c.text == entity).returning(QuoteModel.text)
+                stmt = delete(QuoteModel).where(QuoteModel.text == entity).returning(QuoteModel.text)
             elif db_name == "messages":
-                stmt = delete(MessageModel).where(MessageModel.c.id == entity).returning(MessageModel.id)
+                stmt = delete(MessageModel).where(MessageModel.id == entity).returning(MessageModel.id)
 
             result = session.execute(stmt)
             if result.rowcount == 0:
@@ -91,7 +91,7 @@ def db_delete(db_name=str, entity=str):
 def db_movie_set_watched(entity=str):
     try:
         with Session() as session:
-            session.execute(update(MovieModel).where(MovieModel.c.title == entity).values(watched_status=True))
+            session.execute(update(MovieModel).where(MovieModel.title == entity).values(watched_status=True))
     except SQLAlchemyError:
         return "Error"
 
@@ -99,7 +99,7 @@ def db_movie_set_watched(entity=str):
 def db_movie_set_not_watched(entity=str):
     try:
         with Session() as session:
-            session.execute(update(MovieModel).where(MovieModel.c.title == entity).values(watched_status=False))
+            session.execute(update(MovieModel).where(MovieModel.title == entity).values(watched_status=False))
     except SQLAlchemyError:
         return "Error"
 
