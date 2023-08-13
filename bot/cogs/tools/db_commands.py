@@ -70,7 +70,7 @@ def db_select_all():
         return result
 
 
-def db_delete(db_name, entity):
+def db_delete(db_name=str, entity=str):
     try:
         with Session() as session:
             if db_name == "movies":
@@ -88,7 +88,7 @@ def db_delete(db_name, entity):
         return "Error"
 
 
-def db_movie_set_watched(entity):
+def db_movie_set_watched(entity=str):
     try:
         with Session() as session:
             stmt = update(MovieModel).where(MovieModel.title == entity).values(watched_status=True).returning(
@@ -101,7 +101,7 @@ def db_movie_set_watched(entity):
         return "Error"
 
 
-def db_movie_set_not_watched(entity):
+def db_movie_set_not_watched(entity=str):
     try:
         with Session() as session:
             stmt = update(MovieModel).where(MovieModel.title == entity).values(watched_status=False).returning(
