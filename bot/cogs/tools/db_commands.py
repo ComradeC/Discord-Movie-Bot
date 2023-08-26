@@ -89,9 +89,12 @@ def db_delete(db_name=str, entity=str):
 
 
 def db_movie_set_watched(entity=str):
+    print(entity)
     try:
         with Session() as session:
-            session.execute(update(MovieModel).where(MovieModel.title == entity).values(watched_status=True))
+            stmt = update(MovieModel).where(MovieModel.title == entity).values(watched_status=True)
+            session.execute(stmt)
+            session.commit()
     except SQLAlchemyError:
         return "Error"
 
@@ -99,7 +102,9 @@ def db_movie_set_watched(entity=str):
 def db_movie_set_not_watched(entity=str):
     try:
         with Session() as session:
-            session.execute(update(MovieModel).where(MovieModel.title == entity).values(watched_status=False))
+            stmt = update(MovieModel).where(MovieModel.title == entity).values(watched_status=False)
+            session.execute(stmt)
+            session.commit()
     except SQLAlchemyError:
         return "Error"
 
