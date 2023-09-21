@@ -74,15 +74,13 @@ def db_delete(db_name=str, entity=str):
     try:
         with Session() as session:
             if db_name == "movies":
-                stmt = delete(MovieModel).where(MovieModel.title == entity).returning(MovieModel.title)
+                stmt = delete(MovieModel).where(MovieModel.title == entity)
             elif db_name == "quotes":
-                stmt = delete(QuoteModel).where(QuoteModel.text == entity).returning(QuoteModel.text)
+                stmt = delete(QuoteModel).where(QuoteModel.text == entity)
             elif db_name == "messages":
-                stmt = delete(MessageModel).where(MessageModel.id == entity).returning(MessageModel.id)
+                stmt = delete(MessageModel).where(MessageModel.id == entity)
 
-            result = session.execute(stmt)
-            if result.rowcount == 0:
-                return "Error"
+            session.execute(stmt)
             session.commit()
     except SQLAlchemyError:
         return "Error"
