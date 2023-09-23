@@ -9,17 +9,6 @@ from sqlalchemy.sql.expression import func
 from .models import MovieModel, QuoteModel, DowQuoteModel, MessageModel
 from .settings import Session
 
-
-def db_add_movie(title, kp_id, imdb_id):
-    try:
-        with Session() as session:
-            movie = MovieModel(title=title, watched_status=False, kp_id=kp_id, imdb_id=imdb_id)
-            session.add(movie)
-            session.commit()
-    except SQLAlchemyError:
-        return "Error"
-
-
 def db_change_toxicity(message_id, amount, author, text):
     try:
         with Session() as session:
@@ -64,12 +53,6 @@ def db_select(db_name):
             return session.execute(stmt)
 
 
-def db_select_all():
-    with Session() as session:
-        result = session.execute(select(MovieModel.title, MovieModel.watched_status))
-        return result
-
-
 def db_delete(db_name=str, entity=str):
     try:
         with Session() as session:
@@ -80,27 +63,6 @@ def db_delete(db_name=str, entity=str):
             elif db_name == "messages":
                 stmt = delete(MessageModel).where(MessageModel.id == entity)
 
-            session.execute(stmt)
-            session.commit()
-    except SQLAlchemyError:
-        return "Error"
-
-
-def db_movie_set_watched(entity=str):
-    print(entity)
-    try:
-        with Session() as session:
-            stmt = update(MovieModel).where(MovieModel.title == entity).values(watched_status=True)
-            session.execute(stmt)
-            session.commit()
-    except SQLAlchemyError:
-        return "Error"
-
-
-def db_movie_set_not_watched(entity=str):
-    try:
-        with Session() as session:
-            stmt = update(MovieModel).where(MovieModel.title == entity).values(watched_status=False)
             session.execute(stmt)
             session.commit()
     except SQLAlchemyError:
