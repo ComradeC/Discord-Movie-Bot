@@ -33,7 +33,7 @@ jobs:
           key: ${{ secrets.KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           port: ${{ secrets.PORT }}
-          script:
+          script: |
             cd bot
             docker compose down
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/discord-movie-bot:latest
