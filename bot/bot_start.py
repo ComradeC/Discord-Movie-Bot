@@ -7,7 +7,7 @@ import nextcord
 
 # local modules
 from cogs.tools.settings import DISCORD_TOKEN
-
+from cogs.tools.ZeroTier import get_network_users
 # cogs
 from cogs import movies_commands, quotes_commands, polls_commands, karma_commands
 
@@ -29,5 +29,12 @@ async def on_ready():
 async def hello(ctx):
     await ctx.send("Драсти")
 
+
+@MovieBot.slash_command(name="zt", description="Табличка со статусом пользователей")
+async def zt(ctx):
+    message = "```\nWololo1537 users were last seen\n"
+    for k, v in get_network_users().items():
+        message += k + v + "\n"
+    await ctx.send(message + "```")
 
 MovieBot.run(DISCORD_TOKEN)
