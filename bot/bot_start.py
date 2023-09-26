@@ -32,9 +32,20 @@ async def hello(ctx):
 
 @MovieBot.slash_command(name="zt", description="Табличка со статусом пользователей")
 async def zt(ctx):
-    message = "```\nWololo1537 users were last seen\n"
-    for k, v in get_network_users().items():
+    network_name, network_users = get_network_users()
+    message = f"```\n{network_name} users were last seen\n"
+    for k, v in network_users().items():
         message += k + v + "\n"
     await ctx.send(message + "```")
+
+
+@MovieBot.slash_command(name="der_password", description="Помогите, я опять забыл пароль от архива!")
+async def der_password(ctx):
+    await ctx.send("cs.rin.ru, запиши уже -_-")
+
+
+@MovieBot.slash_command(name="morda", description="Когда не умеешь читать, но нужно зайти на веб-морду")
+async def morda(ctx):
+    await ctx.send("Адрес есть в моем описании - https://10.147.18.24:8080")
 
 MovieBot.run(DISCORD_TOKEN)

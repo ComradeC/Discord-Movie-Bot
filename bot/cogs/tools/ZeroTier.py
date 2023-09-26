@@ -8,6 +8,8 @@ def get_network_users():
         'Authorization': f'token {os.environ["ZT_TOKEN"]}',
         'Content-Type': 'application/json',
     }
+    network_name = requests.get(f"https://api.zerotier.com/api/v1/network/{os.environ['ZT_NETWORK']}",
+                        headers=headers).json()["config"]["name"]
     data = requests.get(f"https://api.zerotier.com/api/v1/network/{os.environ['ZT_NETWORK']}/member",
                         headers=headers).json()
     result_dict = {}
@@ -33,4 +35,4 @@ def get_network_users():
             text = unit if delta == 1 else unit + "s"
             message = f"About {delta} {text} ago."
         result_dict.update({member["name"].ljust(25): message})
-    return result_dict
+    return network_name, result_dict
