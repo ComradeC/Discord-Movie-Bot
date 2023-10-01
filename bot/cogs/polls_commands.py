@@ -44,7 +44,7 @@ class NewFieldModal(nextcord.ui.Modal):
 
 class ViewPoll(nextcord.ui.View):
 
-    categories = ["Cringe", "Normal"]
+    categories = ["Cringe Movies", "Normal Movies"]
 
     @nextcord.ui.button(label="New category", style=nextcord.ButtonStyle.blurple, row=3)
     async def new_category(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
@@ -66,7 +66,7 @@ class ViewPoll(nextcord.ui.View):
     @nextcord.ui.button(label="Quit all", style=nextcord.ButtonStyle.red, row=3)
     async def callback(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         msg = interaction.message
-        username = interaction.user.name
+        username = interaction.user.display_name
         embed_dict = msg.embeds[0].to_dict()
         for category in embed_dict['fields']:
             category['value'] = category['value'].replace(f"\n{username}", "")
@@ -92,13 +92,13 @@ class Polls(commands.Cog, nextcord.ClientCog):
     @poll.subcommand(description="Creates a new poll")
     async def create(self, interaction: nextcord.Interaction):
         embed = nextcord.Embed(title=f"Poll for {datetime.date.today()}", color=random.randint(0, 65535))
-        embed.add_field(name="Cringe", value="none")
-        embed.add_field(name="Normal", value="none")
+        embed.add_field(name="Cringe Movies", value="none")
+        embed.add_field(name="Normal Movies", value="none")
         global view
         view = ViewPoll(timeout=3600 * 24)
 
-        button_0 = JoinButton(label="Join Cringe", category_id=0)
-        button_1 = JoinButton(label="Join Normal", category_id=1)
+        button_0 = JoinButton(label="Join Cringe Gang", category_id=0)
+        button_1 = JoinButton(label="Join Normal Brotherhood", category_id=1)
         view.add_item(button_0)
         view.add_item(button_1)
         await interaction.response.send_message(view=view, embed=embed)
