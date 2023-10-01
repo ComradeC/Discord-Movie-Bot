@@ -23,11 +23,11 @@ class JoinButton(nextcord.ui.Button):
         msg = interaction.message
         embed_dict = msg.embeds[0].to_dict()
         if embed_dict['fields'][self.cat_id]['value'] == "none":
-            embed_dict['fields'][self.cat_id]['value'] = interaction.user.name
-        elif interaction.user.name in embed_dict['fields'][self.cat_id]['value']:
+            embed_dict['fields'][self.cat_id]['value'] = interaction.user.display_name
+        elif interaction.user.display_name in embed_dict['fields'][self.cat_id]['value']:
             pass
         else:
-            embed_dict['fields'][self.cat_id]['value'] += "\n" + interaction.user.name
+            embed_dict['fields'][self.cat_id]['value'] += "\n" + interaction.user.display_name
         new_embed = nextcord.Embed.from_dict(embed_dict)
         await msg.edit(embed=new_embed)
 
