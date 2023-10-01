@@ -16,7 +16,7 @@ intents = nextcord.Intents.all()
 MovieBot = commands.Bot(command_prefix="!", intents=intents, default_guild_ids=[962235918150955008, 757218832111763557])
 MovieBot.add_cog(movies_commands.Movies(MovieBot))
 # MovieBot.add_cog(quotes_commands.Quotes(MovieBot))
-# MovieBot.add_cog(polls_commands.Polls(MovieBot))
+MovieBot.add_cog(polls_commands.Polls(MovieBot))
 # MovieBot.add_cog(karma_commands.Karma(MovieBot))
 
 
@@ -38,14 +38,5 @@ async def zt(ctx):
         message += k + v + "\n"
     await ctx.send(message + "```")
 
-
-@MovieBot.slash_command(name="der_password", description="Помогите, я опять забыл пароль от архива!")
-async def der_password(ctx):
-    await ctx.send("cs.rin.ru, запиши уже -_-")
-
-
-@MovieBot.slash_command(name="morda", description="Когда не умеешь читать, но нужно зайти на веб-морду")
-async def morda(ctx):
-    await ctx.send("Адрес есть в моем описании - https://10.147.18.24:8080")
 
 MovieBot.run(DISCORD_TOKEN)
