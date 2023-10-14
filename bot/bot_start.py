@@ -13,7 +13,7 @@ from cogs import movies_commands, quotes_commands, polls_commands, karma_command
 
 intents = nextcord.Intents.all()
 
-MovieBot = commands.Bot(command_prefix="!", intents=intents, default_guild_ids=[962235918150955008, 757218832111763557])
+MovieBot = commands.Bot(command_prefix="!", intents=intents)
 MovieBot.add_cog(movies_commands.Movies(MovieBot))
 # MovieBot.add_cog(quotes_commands.Quotes(MovieBot))
 MovieBot.add_cog(polls_commands.Polls(MovieBot))

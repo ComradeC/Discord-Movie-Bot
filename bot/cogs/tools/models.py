@@ -12,6 +12,7 @@ class MovieModel(Base):
 
     title = Column(String, nullable=False)
     watched_status = Column(Boolean)
+    added_by = Column(String, nullable=False)
 
     kp_id = Column(String)
     imdb_id = Column(String)
