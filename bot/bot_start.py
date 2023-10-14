@@ -1,7 +1,7 @@
 # bot_start.py
 
 # external modules
-from nextcord.ext import commands
+from nextcord.ext import commands, application_checks
 import nextcord
 
 
@@ -37,6 +37,12 @@ async def zt(ctx):
     for k, v in network_users().items():
         message += k + v + "\n"
     await ctx.send(message + "```")
+
+
+@MovieBot.slash_command(name="permits")
+@application_checks.has_permissions(create_public_threads=True)
+async def test_perms(interaction: nextcord.Interaction):
+    await interaction.response.send_message('You can create public threads.')
 
 
 MovieBot.run(DISCORD_TOKEN)
