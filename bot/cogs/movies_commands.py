@@ -67,7 +67,9 @@ class Movies(commands.Cog, nextcord.ClientCog):
 
         try:
             with Session() as session:
-                query = select(MovieModel.title, MovieModel.watched_status).where(MovieModel.added_by == author)
+                query = select(MovieModel.title, MovieModel.watched_status).\
+                    where(MovieModel.added_by == author).\
+                    order_by(MovieModel.id)
                 movie_list = session.execute(query)
         except SQLAlchemyError:
             return await interaction.followup.send("Something went wrong.")
